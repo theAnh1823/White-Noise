@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true"
+        android:state_enabled="false"
+        android:drawable="@drawable/ic_switch_vie_disable"/>
+
+    <item android:state_checked="false"
+        android:state_enabled="false"
+        android:drawable="@drawable/ic_switch_eng_disable"/>
+
+    <item android:state_checked="true"
+        android:state_enabled="true"
+        android:drawable="@drawable/ic_switch_vie"/>
+
+    <item android:state_checked="false"
+        android:state_enabled="true"
+        android:drawable="@drawable/ic_switch_eng"/>
+</selector>

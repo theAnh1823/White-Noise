@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">White Noise</string>
+    <string name="channel_audio_service_name">Audio play</string>
+    <string name="channel_alarm_service_name">Alarm alert</string>
+    <string name="action_home">Home</string>
+    <string name="action_sleep_calculator">Chu kỳ giấc ngủ</string>
+    <string name="action_alarm">Hẹn giờ</string>
+    <string name="action_setting">Cài đặt</string>
+    <string name="action_search">Tìm kiếm</string>
+
+    <string name="title_blocked_list">Tệp âm thanh đang bị chặn</string>
+    <string name="content_blocked_list">Các âm thanh nằm trong danh sách bị chặn sẽ không thể phát</string>
+    <string name="blocked_list">Danh sách bị chặn</string>
+    <string name="languages">Ngôn ngữ</string>
+    <string name="current_language">Tiếng Việt</string>
+
+    <string name="manage_notifications">Cài đặt thông báo</string>
+    <string name="privacy_policy">Chính sách bảo mật</string>
+    <string name="share">Chia sẻ</string>
+    <string name="feedback">Phản hồi</string>
+    <string name="author">Tác giả</string>
+    <string name="app_version">Phiên bản hiện tại: v1.0</string>
+
+    <string name="cancel">Hủy</string>
+    <string name="ok">OK</string>
+    <string name="save">Lưu</string>
+    <string name="off">Tắt</string>
+    <string name="delete">Xóa</string>
+    <string name="undo">Hoàn tác</string>
+
+    <string name="favorite">Yêu thích</string>
+    <string name="block">Chặn</string>
+    <string name="unfavorite">Bỏ thích</string>
+    <string name="unblock">Bỏ chặn</string>
+    <string name="confirm_block">Xác nhận chặn?</string>
+    <string name="noti_toast_favorite">Đã thêm vào danh sách yêu thích</string>
+    <string name="noti_toast_unfavortite">Đã xóa khỏi danh sách yêu thích</string>
+    <string name="noti_toast_block">Đã thêm vào danh sách bị chặn</string>
+    <string name="noti_toast_unblock">Đã xóa khỏi danh sách bị chặn</string>
+
+    <string name="alarm">Báo thức</string>
+    <string name="add_alarm">Thêm báo thức</string>
+    <string name="fix_alarm">Sửa báo thức</string>
+    <string name="alarm_sound">Nhạc chuông</string>
+    <string name="default_setting">Mặc định</string>
+    <string name="rooster_crow">Gà gáy</string>
+    <string name="piano">Piano</string>
+    <string name="beep_ringtone">Tiếng bíp</string>
+    <string name="bell_ringtone">Tiếng chuông</string>
+    <string name="repeat_alarm">Lặp lại</string>
+    <string name="label">Nhãn</string>
+    <string name="snooze_10_mins">Báo lại sau 10 phút nữa</string>
+    <string name="mesage_delete_alarm">Báo thức đã bị xóa</string>
+    <string name="warning_length_label">Nhãn báo thức không được nhiều hơn 30 ký tự</string>
+    <string name="add_alarm_label">Thêm nhãn báo thức</string>
+    <string name="enter_label">Nhập nhãn</string>
+    <string name="timer">Bộ hẹn giờ</string>
+    <string name="set_timer">Cài đặt bộ hẹn giờ</string>
+    <string name="once">Một lần</string>
+    <string name="daily">Hàng ngày</string>
+    <string name="mon_to_fri">Thứ Hai đến Thứ Sáu</string>
+    <string name="custom">Tùy chỉnh</string>
+
+    <string name="alarm_in">Chuông báo sau</string>
+    <string name="day">ngày</string>
+    <string name="hour">giờ</string>
+    <string name="minute">phút</string>
+    <string name="days">ngày</string>
+    <string name="hours">giờ</string>
+    <string name="minutes">phút</string>
+
+    <string name="monday">Thứ Hai</string>
+    <string name="tuesday">Thứ Ba</string>
+    <string name="wednesday">Thứ Tư</string>
+    <string name="thursday">Thứ Năm</string>
+    <string name="friday">Thứ Sáu</string>
+    <string name="saturday">Thứ Bảy</string>
+    <string name="sunday">Chủ Nhật</string>
+
+    <string name="monday_abbreviation">Th 2</string>
+    <string name="tuesday_abbreviation">Th 3</string>
+    <string name="wednesday_abbreviation">Th 4</string>
+    <string name="thursday_abbreviation">Th 5</string>
+    <string name="friday_abbreviation">Th 6</string>
+    <string name="saturday_abbreviation">Th 7</string>
+    <string name="sunday_abbreviation">CN</string>
+
+    <string name="want_to_wake_up_at">Bạn muốn thức dậy lúc</string>
+    <string name="want_to_sleep_now">Nếu bạn ngủ ngay bây giờ</string>
+    <string name="calculate">Tính toán</string>
+    <string name="recalculate">Tính toán lại</string>
+    <string name="sleep_now">Ngủ ngay</string>
+    <string name="suggested">Được đề xuất</string>
+    <string name="header_result_sleep_calculate">Một người trung bình mất khoảng 15 phút để chìm vào giấc ngủ</string>
+    <string name="body_result_sleep_by_time">Bạn nên cố gắng đi ngủ vào một trong những thời điểm sau:</string>
+    <string name="body_result_sleep_now">Nếu bạn đi ngủ ngay bây giờ, bạn nên cố gắng thức dậy vào một trong những thời điểm sau:</string>
+    <string name="bottem_result_sleep_calculate">Nếu bạn thức dậy vào một trong những thời điểm này, bạn sẽ thức giấc giữa các chu kỳ ngủ 90 phút. Một giấc ngủ ngon bao gồm 5–6 chu kỳ hoàn chỉnh</string>
+    <string name="hours_of_sleep">giờ ngủ</string>
+    <string name="sleep_cycles">chu kỳ ngủ.</string>
+</resources>

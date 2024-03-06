@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity"
+    android:background="@drawable/background_gradient">
+ <androidx.viewpager2.widget.ViewPager2
+     android:id="@+id/view_pager2"
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+     app:layout_constraintLeft_toLeftOf="parent"
+     app:layout_constraintRight_toRightOf="parent"
+     app:layout_constraintTop_toTopOf="parent" />
+
+ <RelativeLayout
+     android:id="@+id/layout_bottom_audio"
+     android:layout_width="match_parent"
+     android:layout_height="@dimen/nofification_collapsed"
+     android:background="@color/medium_blue"
+     android:visibility="gone"
+     app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+     app:layout_constraintRight_toRightOf="parent"
+     app:layout_constraintLeft_toLeftOf="parent"
+     android:paddingLeft="10dp"
+     android:paddingRight="10dp">
+
+  <com.google.android.material.imageview.ShapeableImageView
+      android:id="@+id/img_audio"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_centerVertical="true"
+      app:shapeAppearanceOverlay="@style/RoundedSquare"
+      android:scaleType="centerCrop"
+      android:src="@drawable/test_image" />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_centerVertical="true"
+      android:layout_marginStart="20dp"
+      android:layout_marginEnd="10dp"
+      android:layout_toStartOf="@id/img_play_or_pause"
+      android:layout_toEndOf="@+id/img_audio"
+      android:gravity="center_vertical"
+      android:orientation="vertical">
+
+   <TextView
+       android:id="@+id/tv_title_audio"
+       style="@style/TextAppearance.Compat.Notification.Title"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/app_name"
+       android:textSize="14sp"
+       android:textColor="@color/white"
+       android:layout_marginBottom="5dp"/>
+   <TextView
+       android:id="@+id/tv_countdown_timer"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:visibility="gone"
+       android:text="@string/off"
+       android:textSize="12sp"
+       android:textColor="@color/white"
+       android:alpha="0.8"/>
+
+  </LinearLayout>
+
+  <ImageView
+      android:id="@+id/img_play_or_pause"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_marginEnd="20dp"
+      android:padding="10dp"
+      android:layout_toStartOf="@id/img_close"
+      android:src="@drawable/play_24dp"
+      android:background="?attr/selectableItemBackgroundBorderless"/>
+
+  <ImageView
+      android:id="@+id/img_close"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      android:layout_marginEnd="5dp"
+      android:layout_alignParentEnd="true"
+      android:layout_centerVertical="true"
+      android:src="@drawable/close_24dp"
+      android:background="?attr/selectableItemBackgroundBorderless"/>
+ </RelativeLayout>
+
+ <com.google.android.material.bottomnavigation.BottomNavigationView
+     android:id="@+id/bottom_nav"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintLeft_toLeftOf="parent"
+     app:layout_constraintRight_toRightOf="parent"
+     tools:ignore="MissingConstraints"
+     app:menu="@menu/menu_bottom_nav"
+     app:itemBackground="@color/dark_blue"
+     app:itemIconTint="@color/colors_navigation"
+     app:itemTextColor="@color/colors_navigation"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

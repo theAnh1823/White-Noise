@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "421932605423",
+    "project_id": "whitenoise-e1103",
+    "storage_bucket": "whitenoise-e1103.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421932605423:android:20447231578cc88bb9201a",
+        "android_client_info": {
+          "package_name": "com.example.whitenoiseapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuLLoF9rU5YMtl2SidAa--QX2-2cACf4I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
