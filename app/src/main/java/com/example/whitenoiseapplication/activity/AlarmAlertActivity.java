@@ -1,7 +1,9 @@
 package com.example.whitenoiseapplication.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -15,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.service.AlarmService;
+import com.example.whitenoiseapplication.util.LocaleHelper;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
 import com.google.android.material.button.MaterialButton;
 
@@ -27,6 +30,7 @@ import at.markushi.ui.CircleButton;
 
 public class AlarmAlertActivity extends AppCompatActivity {
     private Alarm alarm;
+    private Context context;
     private AppCompatTextView tvCurrentTime, tvCurrentDate, tvTitleAlarm;
     private CircleButton btnDisableAlarm;
     private MaterialButton btnSnooze;
@@ -37,6 +41,15 @@ public class AlarmAlertActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_alert);
         getSupportActionBar().hide();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
+        boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
+        if (isVietnameseLanguage) {
+            context = LocaleHelper.setLocale(this, "vi");
+        } else {
+            context = LocaleHelper.setLocale(this, "en");
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true);
             setTurnScreenOn(true);

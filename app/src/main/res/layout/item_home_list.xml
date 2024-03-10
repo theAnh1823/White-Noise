@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/favorite_20dp"
         android:visibility="gone"
-        android:background="@android:color/transparent"
+        android:background="?attr/selectableItemBackgroundBorderless"
         tools:ignore="MissingConstraints"
         android:padding="10dp"
         app:layout_constraintTop_toTopOf="parent"

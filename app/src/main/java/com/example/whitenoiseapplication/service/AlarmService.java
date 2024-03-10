@@ -60,7 +60,7 @@ public class AlarmService extends Service {
         mMediaPlayer.start();
 
         long[] pattern = {0, 300, 200, 400};
-//        mVibrator.vibrate(pattern, 0);
+        mVibrator.vibrate(pattern, 0);
 
         Intent notificationIntent = new Intent(this, AlarmAlertActivity.class);
         notificationIntent.putExtra("bundle_alarm", bundle);

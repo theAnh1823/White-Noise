@@ -10,11 +10,11 @@ import java.util.Calendar;
 import java.util.List;
 
 public final class DateTimeInterval {
-    private static String StrDateTimeDuration;
+    private static String strDateTimeDuration;
 
     public static String getDateTimeInterval(Alarm alarm, Context context) {
         Calendar calendar = Calendar.getInstance();
-        StrDateTimeDuration = context.getString(R.string.alarm_in);
+        strDateTimeDuration = context.getString(R.string.alarm_in);
         String settingRepeatAlarm = alarm.getRepeatModeAlarm();
         if (settingRepeatAlarm.equals(context.getString(R.string.mon_to_fri))) {
             if (calendar.get(Calendar.DAY_OF_WEEK) >= 5)
@@ -23,7 +23,7 @@ public final class DateTimeInterval {
             setDateDuration(findNearestDay(alarm), context);
         }
         setTimeDuration(alarm.getAlarmHour(), alarm.getAlarmMinute(), context);
-        return StrDateTimeDuration;
+        return strDateTimeDuration;
     }
 
     private static void setDateDuration(int specifiedDayOfWeek, Context context) {
@@ -32,7 +32,7 @@ public final class DateTimeInterval {
         int dayAsPart = (specifiedDayOfWeek - currentDayOfWeek + 7) % 7;
         String strDay = dayAsPart > 1 ? context.getString(R.string.days) : context.getString(R.string.day);
         if (dayAsPart > 0) {
-            StrDateTimeDuration += " " + dayAsPart + " " + strDay;
+            strDateTimeDuration += " " + dayAsPart + " " + strDay;
         }
     }
 
@@ -53,13 +53,14 @@ public final class DateTimeInterval {
             hourDiff = 24;
         String strHour = hourDiff > 1 ? context.getString(R.string.hours) : context.getString(R.string.hour);
         String strMinute = minuteDiff > 1 ? context.getString(R.string.minutes) : context.getString(R.string.minute);
-        StrDateTimeDuration += " " + hourDiff + " " + strHour + " " + minuteDiff + " " + strMinute;
+        strDateTimeDuration += " " + hourDiff + " " + strHour + " " + minuteDiff + " " + strMinute;
     }
 
     private static int findNearestDay(Alarm alarm) {
-        List<Integer> listDayOfWeek = new ArrayList<>();
-        getListDayOfWeek(alarm, listDayOfWeek);
+        List<Integer> listDayOfWeek = getListDayOfWeek(alarm);
         Calendar calendar = Calendar.getInstance();
+        if (listDayOfWeek.isEmpty())
+            return 0;
         for (int i = 0; i < listDayOfWeek.size(); i++) {
             if (calendar.get(Calendar.DAY_OF_WEEK) - listDayOfWeek.get(i) <= 0) {
                 return listDayOfWeek.get(i);
@@ -68,7 +69,8 @@ public final class DateTimeInterval {
         return listDayOfWeek.get(0);
     }
 
-    private static void getListDayOfWeek(Alarm alarm, List<Integer> listDayOfWeek) {
+    private static List<Integer> getListDayOfWeek(Alarm alarm) {
+        List<Integer> listDayOfWeek = new ArrayList<>();
         if (alarm.isMonday()) {
             listDayOfWeek.add(Calendar.MONDAY);
         }
@@ -90,5 +92,6 @@ public final class DateTimeInterval {
         if (alarm.isSunday()) {
             listDayOfWeek.add(Calendar.SUNDAY);
         }
+        return listDayOfWeek;
     }
 }

@@ -58,6 +58,7 @@ public class FavoriteAudioFragment extends Fragment {
     private int mCurrentTypeDisplay = Audio.TYPE_GRID;
     private List<Audio> mListAudio;
     private Menu mMenu;
+    private int currentPlayingAudioId = -1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,7 +76,8 @@ public class FavoriteAudioFragment extends Fragment {
                     showDialogUnBlocked(audio);
                 }
                 else {
-                    resetCountDownTimer();
+                    if (currentPlayingAudioId != audio.getId())
+                        resetCountDownTimer(audio);
                     stopService();
                     openAudioActivity(audio);
                     clickStartService(audio);
@@ -249,10 +251,11 @@ public class FavoriteAudioFragment extends Fragment {
         getActivity().stopService(intent);
     }
 
-    private void resetCountDownTimer() {
+    private void resetCountDownTimer(Audio audio) {
+        currentPlayingAudioId = audio.getId();
         if (MainActivity.countDownTimer != null){
-            Log.e("countDownTimer", "countDownTimer is NULL");
             MainActivity.countDownTimer.cancel();
+            TimeSingleton.getInstance().setTimeRunning(false);
             TimeSingleton.getInstance().setTimeRemaining(0);
             MainActivity.countDownTimer = null;
         }
@@ -341,7 +344,6 @@ public class FavoriteAudioFragment extends Fragment {
                 }
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Audio audio = postSnapshot.getValue(Audio.class);
-//                    Log.e("TAG", audio.toString());
                     if (audio!= null && audio.isFavorite()){
                         mList.add(audio);
                     }
@@ -360,7 +362,6 @@ public class FavoriteAudioFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-//        stopService();
         super.onDestroy();
     }
 }

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">White Noise</string>
+    <string name="link_app">https://github.com/theAnh1823/White-Noise.git</string>
+    <string name="email_to_receive_feedback">theanh01082003@gmail.com"</string>
     <string name="channel_audio_service_name">Audio play</string>
     <string name="channel_alarm_service_name">Alarm alert</string>
+    <string name="send_feedback">Gửi đánh giá</string>
+    <string name="send_feedback_about_app">Phản hồi về ứng dụng White Noise</string>
+
     <string name="action_home">Trang chủ</string>
     <string name="action_sleep_calculator">Chu kỳ giấc ngủ</string>
     <string name="action_alarm">Hẹn giờ</string>
@@ -11,11 +16,9 @@
 
     <string name="title_blocked_list">Tệp âm thanh đang bị chặn</string>
     <string name="content_blocked_list">Các âm thanh nằm trong danh sách bị chặn sẽ không thể phát</string>
-    <string name="blocked_list">Danh sách bị chặn</string>
     <string name="languages">Ngôn ngữ</string>
     <string name="current_language">Tiếng Việt</string>
 
-    <string name="manage_notifications">Cài đặt thông báo</string>
     <string name="privacy_policy">Chính sách bảo mật</string>
     <string name="share">Chia sẻ</string>
     <string name="feedback">Phản hồi</string>
@@ -29,6 +32,7 @@
     <string name="delete">Xóa</string>
     <string name="undo">Hoàn tác</string>
 
+    <string name="all">Tất cả</string>
     <string name="favorite">Yêu thích</string>
     <string name="block">Chặn</string>
     <string name="unfavorite">Bỏ thích</string>
@@ -51,7 +55,7 @@
     <string name="repeat_alarm">Lặp lại</string>
     <string name="label">Nhãn</string>
     <string name="snooze_10_mins">Báo lại sau 10 phút nữa</string>
-    <string name="mesage_delete_alarm">Báo thức đã bị xóa</string>
+    <string name="message_delete_alarm">Báo thức đã bị xóa</string>
     <string name="warning_length_label">Nhãn báo thức không được nhiều hơn 30 ký tự</string>
     <string name="add_alarm_label">Thêm nhãn báo thức</string>
     <string name="enter_label">Nhập nhãn</string>
@@ -98,4 +102,6 @@
     <string name="bottem_result_sleep_calculate">Nếu bạn thức dậy vào một trong những thời điểm này, bạn sẽ thức giấc giữa các chu kỳ ngủ 90 phút. Một giấc ngủ ngon bao gồm 5–6 chu kỳ hoàn chỉnh</string>
     <string name="hours_of_sleep">giờ ngủ</string>
     <string name="sleep_cycles">chu kỳ ngủ.</string>
+    <string name="blocked_list">Danh sách bị chặn</string>
+    <string name="manage_notifications">Cài đặt thông báo</string>
 </resources>

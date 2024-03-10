@@ -1,5 +1,6 @@
 package com.example.whitenoiseapplication.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,12 +62,13 @@ public class BlockedListActivity extends AppCompatActivity {
         recyclerView.setAdapter(blockedListAdapter);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void unBlockItem(Audio audio) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("list_audios");
         audio.setBlocked(false);
         mDatabase.child("" + audio.getId()).updateChildren(audio.toMap());
         blockedListAdapter.notifyDataSetChanged();
-        Toast.makeText(this, "Đã xóa khỏi danh sách bị chặn", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.noti_toast_unblock), Toast.LENGTH_SHORT).show();
     }
 
     private List<Audio> getBlockedList() {

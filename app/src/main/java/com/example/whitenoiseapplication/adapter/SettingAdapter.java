@@ -1,5 +1,9 @@
 package com.example.whitenoiseapplication.adapter;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +24,13 @@ import com.example.whitenoiseapplication.model.Setting;
 import java.util.List;
 
 public class SettingAdapter extends RecyclerView.Adapter {
+    private Context context;
     private List<Setting> mListSetting;
     private IClickItemByPosition iClickItemByPosition;
     private IClickChangeLanguage iClickChangeLanguage;
 
-    public SettingAdapter(List<Setting> list, IClickItemByPosition iClickItemByPosition, IClickChangeLanguage iClickChangeLanguage) {
+    public SettingAdapter(Context context, List<Setting> list, IClickItemByPosition iClickItemByPosition, IClickChangeLanguage iClickChangeLanguage) {
+        this.context = context;
         this.mListSetting = list;
         this.iClickItemByPosition = iClickItemByPosition;
         this.iClickChangeLanguage = iClickChangeLanguage;
@@ -76,14 +82,22 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 }
             });
         } else if (holder instanceof ChangeLanguageHolder) {
+            SharedPreferences sharedPreferences = context.getSharedPreferences("pref_switch_language", MODE_PRIVATE);
+            ((ChangeLanguageHolder) holder).switchLanguage.setChecked(sharedPreferences.getBoolean("value", true));
             ((ChangeLanguageHolder) holder).switchLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     iClickChangeLanguage.clickChangeLanguage(isChecked);
+
+                    SharedPreferences.Editor editor = context.getSharedPreferences("pref_switch_language", MODE_PRIVATE).edit();
+                    editor.putBoolean("value", isChecked);
+                    editor.apply();
+                    ((ChangeLanguageHolder) holder).switchLanguage.setChecked(isChecked);
                 }
             });
         }
     }
+
 
     @Override
     public int getItemCount() {

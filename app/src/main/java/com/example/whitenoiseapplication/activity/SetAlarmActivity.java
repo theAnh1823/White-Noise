@@ -39,7 +39,6 @@ public class SetAlarmActivity extends AppCompatActivity {
     private Setting settingRepeatAlarm;
     private CreateAlarmViewModel createAlarmViewModel;
     private AlarmsListViewModel alarmsListViewModel;
-    private final String titleTimeDuration = "";
     private Calendar calendar;
     private ImageView btnClose, btnSaveAlarm;
     private AppCompatTextView tvHeader, tvTitle;

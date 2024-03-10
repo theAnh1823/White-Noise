@@ -119,7 +119,7 @@ public class AlarmFragment extends Fragment implements ItemTouchHelperListener, 
             int deletedIndex = viewHolder.getBindingAdapterPosition();
             mAlarmAdapter.removeItem(alarm, deletedIndex);
 
-            Snackbar snackbar = Snackbar.make(layout, R.string.mesage_delete_alarm, Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(layout, R.string.message_delete_alarm, Snackbar.LENGTH_LONG);
             snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.navy));
             snackbar.setActionTextColor(Color.WHITE);
             snackbar.setAction(R.string.undo, v -> {

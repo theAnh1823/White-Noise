@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">White Noise</string>
+    <string name="link_app">https://github.com/theAnh1823/White-Noise.git</string>
+    <string name="email_to_receive_feedback">theanh01082003@gmail.com"</string>
+    <string name="channel_audio_service_name">Audio play</string>
+    <string name="channel_alarm_service_name">Alarm alert</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="send_feedback_about_app">Feedback about the White Noise app</string>
+
+    <string name="action_home">Home</string>
+    <string name="action_sleep_calculator">Sleep cycle</string>
+    <string name="action_alarm">Alarm</string>
+    <string name="action_setting">Setting</string>
+    <string name="action_search">Search</string>
+
+    <string name="sleep_cycles">sleep cycles.</string>
+    <string name="title_blocked_list">The audio file is being blocked</string>
+    <string name="content_blocked_list">The audio files on the blocked list will not be played</string>
+    <string name="blocked_list">Blocked list</string>
+    <string name="languages">Languages</string>
+    <string name="current_language">English</string>
+
+    <string name="manage_notifications">Notification settings</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="share">Share</string>
+    <string name="feedback">Feedback</string>
+    <string name="author">Author</string>
+    <string name="app_version">Current version: v1.0</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="save">Save</string>
+    <string name="off">Off</string>
+    <string name="delete">Delete</string>
+    <string name="undo">Undo</string>
+
+    <string name="all">All</string>
+    <string name="favorite">Favorite</string>
+    <string name="block">Block</string>
+    <string name="unfavorite">Unfavorite</string>
+    <string name="unblock">Unblock</string>
+    <string name="confirm_block">Confirm blocking this item?</string>
+    <string name="noti_toast_favorite">Added to favorites list</string>
+    <string name="noti_toast_unfavortite">Removed from favorites list</string>
+    <string name="noti_toast_block">Added to blocked list</string>
+    <string name="noti_toast_unblock">Removed from blocked list</string>
+
+    <string name="alarm">Alarm</string>
+    <string name="add_alarm">Add alarm</string>
+    <string name="fix_alarm">Edit alarm</string>
+    <string name="alarm_sound">Ringtone</string>
+    <string name="default_setting">Default</string>
+    <string name="rooster_crow">Rooster crow</string>
+    <string name="piano">Piano</string>
+    <string name="beep_ringtone">Beep</string>
+    <string name="bell_ringtone">Bell ringtone</string>
+    <string name="repeat_alarm">Repeat</string>
+    <string name="label">Label</string>
+    <string name="snooze_10_mins">Snooze for 10 minutes</string>
+    <string name="message_delete_alarm">The alarm has been deleted</string>
+    <string name="warning_length_label">Alarm labels cannot be more than 30 characters</string>
+    <string name="add_alarm_label">Add alarm label</string>
+    <string name="enter_label">Enter label</string>
+    <string name="timer">Timer</string>
+    <string name="set_timer">Set a timer</string>
+    <string name="once">Once</string>
+    <string name="daily">Daily</string>
+    <string name="mon_to_fri">Monday to Friday</string>
+    <string name="custom">Customize</string>
+
+    <string name="alarm_in">Alarm in</string>
+    <string name="day">day</string>
+    <string name="hour">hour</string>
+    <string name="minute">minute</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string name="monday_abbreviation">Mon</string>
+    <string name="tuesday_abbreviation">Tues</string>
+    <string name="wednesday_abbreviation">Wed</string>
+    <string name="thursday_abbreviation">Thur</string>
+    <string name="friday_abbreviation">Fri</string>
+    <string name="saturday_abbreviation">Sat</string>
+    <string name="sunday_abbreviation">Sun</string>
+
+    <string name="want_to_wake_up_at">What time do you want to wake up?</string>
+    <string name="want_to_sleep_now">If you sleep now</string>
+    <string name="calculate">Calculate</string>
+    <string name="recalculate">Go back</string>
+    <string name="sleep_now">Sleep now</string>
+    <string name="suggested">Suggested</string>
+    <string name="header_result_sleep_calculate">It takes the average person about 15 minutes to fall asleep</string>
+    <string name="body_result_sleep_by_time">You should try to go to bed at one of the following times:</string>
+    <string name="body_result_sleep_now">If you go to bed now, you should try to wake up at one of the following times:</string>
+    <string name="bottem_result_sleep_calculate">If you wake up at one of these times, you will wake up between 90-minute sleep cycles. A good night\'s sleep consists of 5–6 complete cycles</string>
+    <string name="hours_of_sleep">hours of sleep</string>
+</resources>

@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        android:checked="true"
+        android:checked="false"
         android:layout_marginEnd="15dp"
         app:track="@drawable/bg_track_language"
         android:thumb="@drawable/switch_thump_language"

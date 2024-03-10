@@ -62,6 +62,7 @@ public class AllAudioFragment extends Fragment {
     private List<Audio> mListAudio;
     private Menu mMenu;
     private int mCurrentPosition;
+    private int currentPlayingAudioId = -1;
 
     @Nullable
     @Override
@@ -79,7 +80,8 @@ public class AllAudioFragment extends Fragment {
                 if (audio.isBlocked()) {
                     showDialogUnBlocked(audio);
                 } else {
-                    resetCountDownTimer();
+                    if (currentPlayingAudioId != audio.getId())
+                        resetCountDownTimer(audio);
                     stopService();
                     openAudioActivity(audio);
                     clickStartService(audio);
@@ -256,7 +258,8 @@ public class AllAudioFragment extends Fragment {
         getActivity().stopService(intent);
     }
 
-    private void resetCountDownTimer() {
+    private void resetCountDownTimer(Audio audio) {
+        currentPlayingAudioId = audio.getId();
         if (MainActivity.countDownTimer != null) {
             MainActivity.countDownTimer.cancel();
             TimeSingleton.getInstance().setTimeRunning(false);

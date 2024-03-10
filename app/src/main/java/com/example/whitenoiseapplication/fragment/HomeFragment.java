@@ -27,19 +27,19 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         mView = inflater.inflate(R.layout.home_fragment, container, false);
         initView();
-        
+
         pager2Adapter = new HomePager2Adapter(this);
         mViewPager2.setAdapter(pager2Adapter);
 
         new TabLayoutMediator(mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                switch (position){
+                switch (position) {
                     case 0:
-                        tab.setText("Tất cả");
+                        tab.setText(getString(R.string.all));
                         break;
                     case 1:
-                        tab.setText("Yêu thích");
+                        tab.setText(getString(R.string.favorite));
                         break;
                 }
             }
@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
         return mView;
     }
 
-    private void initView(){
+    private void initView() {
         mTabLayout = mView.findViewById(R.id.tab_layout);
         mViewPager2 = mView.findViewById(R.id.home_viewpager2);
     }

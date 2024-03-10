@@ -46,15 +46,17 @@
             android:exported="false" />
         <activity
             android:name=".activity.BlockedListActivity"
+            android:screenOrientation="sensorPortrait"
             android:exported="false" />
         <activity android:name=".activity.AlarmAlertActivity"
+            android:screenOrientation="sensorPortrait"
             android:showOnLockScreen="true"
             android:turnScreenOn="true"/>
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
         </activity>

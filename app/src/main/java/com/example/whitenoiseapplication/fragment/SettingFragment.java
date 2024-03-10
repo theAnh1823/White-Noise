@@ -1,16 +1,16 @@
 package com.example.whitenoiseapplication.fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,14 +22,15 @@ import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.BlockedListActivity;
 import com.example.whitenoiseapplication.activity.PolicyActivity;
 import com.example.whitenoiseapplication.adapter.SettingAdapter;
-import com.example.whitenoiseapplication.listener.IClickItemByPosition;
 import com.example.whitenoiseapplication.model.Setting;
+import com.example.whitenoiseapplication.util.LocaleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 
 public class SettingFragment extends Fragment {
+    private Context context;
     private RecyclerView mRecyclerView;
     private SettingAdapter mSettingAdapter;
 
@@ -38,7 +39,7 @@ public class SettingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_fragment, container, false);
         mRecyclerView = view.findViewById(R.id.rcv_setting);
-        mSettingAdapter = new SettingAdapter(getListSetting(), position -> {
+        mSettingAdapter = new SettingAdapter(getContext(),getListSetting(), position -> {
             switch (position) {
                 case 0:
                     openBlockedList();
@@ -58,10 +59,12 @@ public class SettingFragment extends Fragment {
             }
         }, isChecked -> {
             if (isChecked) {
-                setLocal("vi");
+                context = LocaleHelper.setLocale(getContext(), "vi");
             } else {
-                setLocal("en");
+                context = LocaleHelper.setLocale(getContext(), "en");
             }
+            requireActivity().recreate();
+//            startMainActivity();
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -69,13 +72,10 @@ public class SettingFragment extends Fragment {
         return view;
     }
 
-    private void setLocal(String langCode) {
-        Locale locale = new Locale(langCode);
-        Locale.setDefault(locale);
-        Resources resources = getActivity().getResources();
-        Configuration configuration = resources.getConfiguration();
-        configuration.setLocale(locale);
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+    private void startMainActivity(){
+        Intent intent = getActivity().getIntent();
+        getActivity().finish();
+        startActivity(intent);
     }
 
     private void openBlockedList() {
@@ -106,7 +106,7 @@ public class SettingFragment extends Fragment {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "youtube.com");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.link_app));
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,9 +116,9 @@ public class SettingFragment extends Fragment {
     private void sendFeedback() {
         Intent feedbackEmail = new Intent(Intent.ACTION_SEND);
         feedbackEmail.setType("text/email");
-        feedbackEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{"theanhnp32@gmail.com"});
-        feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, "Feedback about White Noise App");
-        startActivity(Intent.createChooser(feedbackEmail, "Send Feedback"));
+        feedbackEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email_to_receive_feedback)});
+        feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.send_feedback_about_app));
+        startActivity(Intent.createChooser(feedbackEmail, getString(R.string.send_feedback)));
     }
 
     private List<Setting> getListSetting() {

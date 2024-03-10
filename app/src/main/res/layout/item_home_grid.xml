@@ -43,7 +43,7 @@
             android:padding="10dp"
             android:visibility="gone"
             android:src="@drawable/favorite_20dp"
-            android:background="@android:color/transparent"/>
+            android:background="?attr/selectableItemBackgroundBorderless"/>
     </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/tv_name_audio"

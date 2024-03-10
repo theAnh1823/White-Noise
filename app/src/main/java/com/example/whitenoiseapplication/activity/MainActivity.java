@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -25,9 +26,11 @@ import com.example.whitenoiseapplication.adapter.ViewPager2MainAdapter;
 import com.example.whitenoiseapplication.model.Audio;
 import com.example.whitenoiseapplication.model.TimeSingleton;
 import com.example.whitenoiseapplication.service.AudioService;
+import com.example.whitenoiseapplication.util.LocaleHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    private Context context;
     private BottomNavigationView mNavigationView;
     private ViewPager2 mViewPager2;
     private RelativeLayout layoutBottom;
@@ -57,12 +60,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-        timeSingleton = TimeSingleton.getInstance();
         initView();
+        timeSingleton = TimeSingleton.getInstance();
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("send_data_to_activity"));
+
+        SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
+        boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
+        if (isVietnameseLanguage) {
+            context = LocaleHelper.setLocale(this, "vi");
+        } else {
+            context = LocaleHelper.setLocale(this, "en");
+        }
 
         mViewPager2.setUserInputEnabled(false);
         setUpViewPager2();
+
+        mNavigationView.getMenu().clear();
+        mNavigationView.inflateMenu(R.menu.menu_bottom_nav);
         mNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @SuppressLint({"ResourceType", "NonConstantResourceId"})
             @Override
@@ -102,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         tvCountdownTimer.setVisibility(View.VISIBLE);
-        if (timeSingleton.isTimeRunning() && timeSingleton.getTimeRemaining() >0) {
+        if (timeSingleton.isTimeRunning() && timeSingleton.getTimeRemaining() > 0) {
             startCountDownTimer(timeSingleton.getTimeRemaining());
         } else if (timeSingleton.getTimeRemaining() == 0) {
             tvCountdownTimer.setVisibility(View.GONE);
@@ -126,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 timeSingleton.setTimeRemaining(millisUntilFinished);
                 tvCountdownTimer.setText(millisToTimeFormat(millisUntilFinished));
-                Log.e("M", "MAIN ACTIVITY: " + millisToTimeFormat(millisUntilFinished));
             }
 
             @Override
