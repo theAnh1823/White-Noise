@@ -71,6 +71,7 @@ public class AlarmAlertActivity extends AppCompatActivity {
         tvTitleAlarm = findViewById(R.id.tv_title_alarm);
         btnDisableAlarm = findViewById(R.id.btn_disable_alarm);
         btnSnooze = findViewById(R.id.btn_snooze_10_mins);
+        btnSnooze.setText(R.string.snooze_10_mins);
 
         Calendar calendar = Calendar.getInstance();
         Locale locale = Locale.getDefault();

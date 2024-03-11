@@ -63,8 +63,7 @@ public class SettingFragment extends Fragment {
             } else {
                 context = LocaleHelper.setLocale(getContext(), "en");
             }
-            requireActivity().recreate();
-//            startMainActivity();
+            startMainActivity();
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);

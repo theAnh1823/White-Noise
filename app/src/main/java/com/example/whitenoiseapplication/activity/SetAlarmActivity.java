@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -24,6 +26,7 @@ import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.model.AlarmSetting;
 import com.example.whitenoiseapplication.model.Setting;
 import com.example.whitenoiseapplication.util.DateTimeInterval;
+import com.example.whitenoiseapplication.util.LocaleHelper;
 import com.example.whitenoiseapplication.util.TimePickerUtil;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
 import com.example.whitenoiseapplication.viewmodel.CreateAlarmViewModel;
@@ -34,6 +37,7 @@ import java.util.List;
 import java.util.Random;
 
 public class SetAlarmActivity extends AppCompatActivity {
+    private Context context;
     private boolean adjustExistingAlarm;
     private Alarm alarmCreating;
     private Setting settingRepeatAlarm;
@@ -48,7 +52,6 @@ public class SetAlarmActivity extends AppCompatActivity {
     private BottomSheetSetAlarm bottomSheetSetAlarm;
     private BottomSheetAddLabelAlarm bottomSheetAddLabelAlarm;
     private BottomSheetCustomAlarmRepeat sheetCustomAlarmRepeat;
-    private List<Setting> listSettingAlarm;
     private List<AlarmSetting> listAlarmSound, listRepeatSelection;
     private List<Boolean> listSelectionDayOfWeek;
 
@@ -59,6 +62,14 @@ public class SetAlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_alarm);
         getSupportActionBar().hide();
         initComponents();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
+        boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
+        if (isVietnameseLanguage) {
+            context = LocaleHelper.setLocale(this, "vi");
+        } else {
+            context = LocaleHelper.setLocale(this, "en");
+        }
 
         calendar = Calendar.getInstance();
         alarmCreating = new Alarm();
@@ -79,7 +90,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         createAlarmViewModel = new ViewModelProvider(this).get(CreateAlarmViewModel.class);
         alarmsListViewModel = new ViewModelProvider(this).get(AlarmsListViewModel.class);
 
-        listSettingAlarm = adjustExistingAlarm ? getListSettingExistAlarm(alarmCreating) : getListSettingDefaultAlarm();
+        List<Setting> listSettingAlarm = adjustExistingAlarm ? getListSettingExistAlarm(alarmCreating) : getListSettingDefaultAlarm();
         setAlarmAdapter = new SetAlarmAdapter(this, listSettingAlarm, new IClickItemBottemSheet() {
             @Override
             public void onItemClick(Setting setting) {
@@ -302,6 +313,6 @@ public class SetAlarmActivity extends AppCompatActivity {
     }
 
     private String getTitleTimeDuration(){
-        return DateTimeInterval.getDateTimeInterval(alarmCreating, getApplicationContext());
+        return DateTimeInterval.getDateTimeInterval(alarmCreating, context);
     }
 }

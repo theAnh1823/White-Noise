@@ -58,8 +58,8 @@ public class Alarm implements Serializable {
     @SuppressLint("MissingPermission")
     public void schedule(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
 
+        Intent intent = new Intent(context, AlarmReceiver.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_alarm", this);
         intent.putExtra("bundle_alarm", bundle);
@@ -78,12 +78,11 @@ public class Alarm implements Serializable {
 
         if (!recurring) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        } else if (repeatForDaysOfWeek){
-            for (int i : getListDayOfWeek()){
+        } else if (repeatForDaysOfWeek) {
+            for (int i : getListDayOfWeek()) {
                 setWeeklyAlarm(alarmManager, calendar, i, pendingIntent);
             }
-        }
-        else {
+        } else {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
         this.isAlarmEnabled = true;
@@ -91,13 +90,13 @@ public class Alarm implements Serializable {
 
     private void setWeeklyAlarm(AlarmManager alarmManager, Calendar calendar, int dayOfWeek, PendingIntent pendingIntent) {
         calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-        if (calendar.getTimeInMillis() <= System.currentTimeMillis()){
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_WEEK, 7);
         }
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
     }
 
-    private List<Integer> getListDayOfWeek(){
+    private List<Integer> getListDayOfWeek() {
         List<Integer> list = new ArrayList<>();
         if (isMonday())
             list.add(Calendar.MONDAY);
@@ -106,7 +105,7 @@ public class Alarm implements Serializable {
         if (isWednesday())
             list.add(Calendar.WEDNESDAY);
         if (isThursday())
-            list.add( Calendar.THURSDAY);
+            list.add(Calendar.THURSDAY);
         if (isFriday())
             list.add(Calendar.FRIDAY);
         if (isSaturday())

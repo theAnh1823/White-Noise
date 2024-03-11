@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -16,14 +17,18 @@ import android.os.Vibrator;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.AlarmAlertActivity;
 import com.example.whitenoiseapplication.fragment.AlarmFragment;
 import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.receiver.AlarmReceiver;
+import com.example.whitenoiseapplication.util.LocaleHelper;
+import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
 
 public class AlarmService extends Service {
+    private Context context;
     public static final int ACTION_CANCEL = 1;
     private Alarm mAlarm;
     private MediaPlayer mMediaPlayer;
@@ -31,6 +36,14 @@ public class AlarmService extends Service {
 
     @Override
     public void onCreate() {
+        SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
+        boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
+        if (isVietnameseLanguage) {
+            context = LocaleHelper.setLocale(this, "vi");
+        } else {
+            context = LocaleHelper.setLocale(this, "en");
+        }
+
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         super.onCreate();
     }
@@ -51,8 +64,9 @@ public class AlarmService extends Service {
 
         int actionAlarm = intent.getIntExtra("action_alarm_service", 0);
         if (actionAlarm == ACTION_CANCEL){
-            mAlarm.cancelAlarm(this);
             stopSelf();
+            mAlarm.cancelAlarm(this);
+            mMediaPlayer.stop();
         }
 
         mMediaPlayer = MediaPlayer.create(getApplicationContext(), mAlarm.getRingToneAlarm());

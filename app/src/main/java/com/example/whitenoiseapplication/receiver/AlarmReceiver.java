@@ -14,28 +14,26 @@ import com.example.whitenoiseapplication.service.RescheduleAlarmService;
 import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    Alarm alarm;
-
+    private Alarm alarm;
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            Toast.makeText(context, "Alarm Reboot", Toast.LENGTH_SHORT).show();
             startRescheduleAlarmsService(context);
         } else {
             int actionAlarm = intent.getIntExtra("action_alarm", 0);
-            if (actionAlarm > 0){
+            if (actionAlarm > 0) {
                 Intent actionIntent = new Intent(context, AlarmService.class);
                 actionIntent.putExtra("action_alarm_service", actionAlarm);
                 context.startService(actionIntent);
             }
 
             Bundle bundle = intent.getBundleExtra("bundle_alarm");
-            if (bundle != null)
+            if (bundle != null) {
                 alarm = (Alarm) bundle.getSerializable("object_alarm");
-
-            if (alarm != null) {
-                if (!alarm.isRecurring() || (alarm.isRecurring() && alarmIsToday()))
-                    startAlarmService(context);
+                if (alarm != null) {
+                    if (!alarm.isRecurring() || (alarm.isRecurring() && alarmIsToday()))
+                        startAlarmService(context);
+                }
             }
         }
     }
