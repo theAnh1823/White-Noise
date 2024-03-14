@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.adapter.ViewPager2MainAdapter;
 import com.example.whitenoiseapplication.model.Audio;
+import com.example.whitenoiseapplication.model.CountDownManager;
 import com.example.whitenoiseapplication.model.TimeSingleton;
 import com.example.whitenoiseapplication.service.AudioService;
 import com.example.whitenoiseapplication.util.LocaleHelper;
@@ -35,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 mViewPager2;
     private RelativeLayout layoutBottom;
     private ImageView imageAudio, imagePlayOrPause, imageClose;
-    private TextView tvTitleAudio, tvCountdownTimer;
-    public static CountDownTimer countDownTimer;
-    private TimeSingleton timeSingleton;
+    private TextView tvTitleAudio;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView tvCountDown;
+    private CountDownManager countDownManager;
     private Audio mAudio;
     private boolean isPlaying;
     private int actionAudio;
@@ -61,7 +63,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
         initView();
-        timeSingleton = TimeSingleton.getInstance();
+        countDownManager = CountDownManager.initInstance(tvCountDown, () -> {
+            sendActionToService(AudioService.ACTION_CLOSE);
+            tvCountDown.setVisibility(View.GONE);
+        });
+//        setCountDownTimer();
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("send_data_to_activity"));
 
         SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
@@ -109,78 +115,47 @@ public class MainActivity extends AppCompatActivity {
         imagePlayOrPause = findViewById(R.id.img_play_or_pause);
         imageClose = findViewById(R.id.img_close);
         tvTitleAudio = findViewById(R.id.tv_title_audio);
-        tvCountdownTimer = findViewById(R.id.tv_countdown_timer);
-        tvCountdownTimer.setCompoundDrawablesWithIntrinsicBounds(R.drawable.timer, 0, 0, 0);
+        tvCountDown = findViewById(R.id.tv_countdown_timer);
+        tvCountDown.setCompoundDrawablesWithIntrinsicBounds(R.drawable.timer, 0, 0, 0);
     }
 
     @Override
     protected void onResume() {
-        tvCountdownTimer.setVisibility(View.VISIBLE);
-        if (timeSingleton.isTimeRunning() && timeSingleton.getTimeRemaining() > 0) {
-            startCountDownTimer(timeSingleton.getTimeRemaining());
-        } else if (timeSingleton.getTimeRemaining() == 0) {
-            tvCountdownTimer.setVisibility(View.GONE);
-        } else {
-            tvCountdownTimer.setText(millisToTimeFormat(timeSingleton.getTimeRemaining()));
-        }
+        tvCountDown.setVisibility(View.VISIBLE);
+        setCountDownTimer();
         super.onResume();
     }
 
-    @Override
-    protected void onPause() {
-        if (countDownTimer != null)
-            countDownTimer.cancel();
-        super.onPause();
-    }
-
-    private void startCountDownTimer(long timeRemaining) {
-        timeSingleton.setTimeRunning(true);
-        countDownTimer = new CountDownTimer(timeRemaining, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeSingleton.setTimeRemaining(millisUntilFinished);
-                tvCountdownTimer.setText(millisToTimeFormat(millisUntilFinished));
-            }
-
-            @Override
-            public void onFinish() {
+    private void setCountDownTimer() {
+        if (countDownManager.isTimerRunning() && countDownManager.getTimeRemaining() > 0) {
+            countDownManager = CountDownManager.initInstance(tvCountDown, () -> {
                 sendActionToService(AudioService.ACTION_CLOSE);
-                tvCountdownTimer.setVisibility(View.GONE);
-            }
-        }.start();
-    }
-
-    @SuppressLint("DefaultLocale")
-    private String millisToTimeFormat(long millisUntilFinished) {
-        long hour = (millisUntilFinished / 3600000) % 24;
-        long min = (millisUntilFinished / 60000) % 60;
-        long sec = (millisUntilFinished / 1000) % 60;
-        if (hour > 0) {
-            return String.format("%02d:%02d:%02d", hour, min, sec);
+                tvCountDown.setVisibility(View.GONE);
+            });
+            countDownManager.startTimer();
+        } else if (countDownManager.getTimeRemaining() == 0) {
+            tvCountDown.setVisibility(View.GONE);
+        } else {
+            tvCountDown.setText(countDownManager.millisToTimeFormat(countDownManager.getTimeRemaining()));
         }
-        return String.format("%02d:%02d", min, sec);
     }
 
     private void pauseCountDownTimer() {
-        timeSingleton.setTimeRunning(false);
-        if (countDownTimer != null)
-            countDownTimer.cancel();
+        if (countDownManager != null)
+            countDownManager.pauseTimer();
     }
 
     private void resumeCountDownTimer() {
-        timeSingleton.setTimeRunning(true);
-        if (timeSingleton.isTimeRunning() && timeSingleton.getTimeRemaining() > 0)
-            startCountDownTimer(timeSingleton.getTimeRemaining());
+        if (!countDownManager.isTimerRunning() && countDownManager.getTimeRemaining() > 0) {
+            if (countDownManager != null)
+                countDownManager.resumeTimer();
+        }
     }
 
     private void resetCountDownTimer() {
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
-        tvCountdownTimer.setVisibility(View.GONE);
-        timeSingleton.setTimeRunning(false);
-        timeSingleton.setTimeRemaining(0);
+        if (countDownManager != null)
+            countDownManager.resetTimer();
+        tvCountDown.setVisibility(View.GONE);
     }
 
     private void setUpViewPager2() {
@@ -257,12 +232,9 @@ public class MainActivity extends AppCompatActivity {
                 actionAudio = AudioService.ACTION_RESUME;
             }
         });
-        imageClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetCountDownTimer();
-                sendActionToService(AudioService.ACTION_CLOSE);
-            }
+        imageClose.setOnClickListener(v -> {
+            resetCountDownTimer();
+            sendActionToService(AudioService.ACTION_CLOSE);
         });
     }
 
@@ -295,10 +267,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        pauseCountDownTimer();
-        countDownTimer = null;
-        timeSingleton.setTimeRemaining(0);
-        tvCountdownTimer.setVisibility(View.GONE);
+        countDownManager.resetTimer();
+        tvCountDown.setVisibility(View.GONE);
         stopService(new Intent(this, AudioService.class));
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }

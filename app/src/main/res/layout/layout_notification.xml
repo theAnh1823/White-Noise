@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nofification_collapsed"
+    android:layout_height="@dimen/notification_collapsed"
     android:background="@color/medium_blue"
     android:padding="10dp">
 

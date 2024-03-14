@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,8 +14,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -29,7 +26,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.model.Audio;
-import com.example.whitenoiseapplication.model.TimeSingleton;
+import com.example.whitenoiseapplication.model.CountDownManager;
 import com.example.whitenoiseapplication.service.AudioService;
 import com.skyfishjy.library.RippleBackground;
 
@@ -39,9 +36,8 @@ public class AudioActivity extends AppCompatActivity {
     private ConstraintLayout layout;
     private ImageView btnCollapse, setTimer;
     private TextView tvTitleAudio;
-    private TextView tvCountDown;
-    private CountDownTimer countDownTimer;
-    private TimeSingleton timeSingleton;
+    public TextView tvCountdown;
+    private CountDownManager countDownManager;
     private RippleBackground rippleBackground;
     private ImageButton btnPlayOrPause;
     private Audio mAudio;
@@ -71,10 +67,14 @@ public class AudioActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        timeSingleton = TimeSingleton.getInstance();
         getExtrasFromMainActivity();
         initView();
-        setCountDownTimer();
+        countDownManager = CountDownManager.initInstance(MainActivity.tvCountDown, () -> {
+            sendActionToService(AudioService.ACTION_CLOSE);
+            tvCountdown.setVisibility(View.GONE);
+        });
+        countDownManager.setTvAudioActivity(this.tvCountdown);
+//        setCountDownTimer();
 
         Glide.with(this).load(mAudio.getImageResource()).centerCrop().transform(new BlurTransformation(25, 5)).into(new CustomTarget<Drawable>() {
             @Override
@@ -94,12 +94,7 @@ public class AudioActivity extends AppCompatActivity {
             getOnBackPressedDispatcher().onBackPressed();
         });
 
-        setTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialogSetTimer();
-            }
-        });
+        setTimer.setOnClickListener(v -> openDialogSetTimer());
 
         btnPlayOrPause.setOnClickListener(v -> {
             if (isPlaying) {
@@ -114,13 +109,18 @@ public class AudioActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        setCountDownTimer();
+        super.onResume();
+    }
+
     private void setCountDownTimer() {
-        if (timeSingleton.isTimeRunning() && timeSingleton.getTimeRemaining() > 0)
-            startCountDownTimer(timeSingleton.getTimeRemaining());
-        else if (timeSingleton.getTimeRemaining() == 0) {
-            tvCountDown.setVisibility(View.GONE);
-        } else {
-            tvCountDown.setText(millisToTimeFormat(timeSingleton.getTimeRemaining()));
+        tvCountdown.setText(countDownManager.millisToTimeFormat(countDownManager.getTimeRemaining()));
+        if (countDownManager.isTimerRunning() && countDownManager.getTimeRemaining() > 0) {
+            countDownManager.startTimer();
+        } else if (countDownManager.getTimeRemaining() == 0) {
+            tvCountdown.setVisibility(View.GONE);
         }
     }
 
@@ -148,14 +148,16 @@ public class AudioActivity extends AppCompatActivity {
                         case 4:
                             openTimePickerDialog();
                             break;
+                        case 5:
+                            tvCountdown.setVisibility(View.GONE);
+                            countDownManager.resetTimer();
+                            break;
                     }
                 })
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     if (checkedItem[0] < 4) {
-                        if (countDownTimer != null) {
-                            countDownTimer.cancel();
-                        }
                         sendRunTimeToService(millisInFuture[checkedItem[0]]);
+                        countDownManager.resetTimer();
                         startCountDownTimer(millisInFuture[checkedItem[0]]);
                         sendActionToService(AudioService.ACTION_RESUME);
                         rippleBackground.startRippleAnimation();
@@ -170,46 +172,21 @@ public class AudioActivity extends AppCompatActivity {
 
 
     private void startCountDownTimer(long l) {
-        tvCountDown.setVisibility(View.VISIBLE);
-        timeSingleton.setTimeRunning(true);
-        timeSingleton.setTimeRemaining(l);
-        countDownTimer = new CountDownTimer(l, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeSingleton.setTimeRemaining(millisUntilFinished);
-                tvCountDown.setText(millisToTimeFormat(millisUntilFinished));
-                Log.e("A", "AUDIO ACTIVITY: " + millisToTimeFormat(millisUntilFinished));
-            }
-
-            @Override
-            public void onFinish() {
-                sendActionToService(AudioService.ACTION_CLOSE);
-                tvCountDown.setVisibility(View.GONE);
-            }
-        }.start();
-    }
-
-    @SuppressLint("DefaultLocale")
-    private String millisToTimeFormat(long millisUntilFinished) {
-        long hour = (millisUntilFinished / 3600000) % 24;
-        long min = (millisUntilFinished / 60000) % 60;
-        long sec = (millisUntilFinished / 1000) % 60;
-        if (hour > 0) {
-            return String.format("%02d:%02d:%02d", hour, min, sec);
-        }
-        return String.format("%02d:%02d", min, sec);
+        countDownManager.setTimeRemaining(l);
+        tvCountdown.setVisibility(View.VISIBLE);
+        countDownManager.startTimer();
     }
 
     private void pauseCountDownTimer() {
-        timeSingleton.setTimeRunning(false);
-        if (countDownTimer != null)
-            countDownTimer.cancel();
+        if (countDownManager != null)
+            countDownManager.pauseTimer();
     }
 
     private void resumeCountDownTimer() {
-        timeSingleton.setTimeRunning(true);
-        if (timeSingleton.isTimeRunning() && timeSingleton.getTimeRemaining() > 0)
-            startCountDownTimer(timeSingleton.getTimeRemaining());
+        if (!countDownManager.isTimerRunning() && countDownManager.getTimeRemaining() > 0) {
+            if (countDownManager != null)
+                countDownManager.resumeTimer();
+        }
     }
 
     private void openTimePickerDialog() {
@@ -219,7 +196,7 @@ public class AudioActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 millisecond = ((hourOfDay * 60L) + minute) * 60000;
-
+                countDownManager.resetTimer();
                 startCountDownTimer(millisecond);
             }
         };
@@ -244,7 +221,7 @@ public class AudioActivity extends AppCompatActivity {
         setTimer = findViewById(R.id.img_activity_audio);
         tvTitleAudio = findViewById(R.id.tv_name_activity_audio);
         tvTitleAudio.setText(mAudio.getNameAudio());
-        tvCountDown = findViewById(R.id.tv_countdown_timer);
+        tvCountdown = findViewById(R.id.tv_countdown_timer);
         rippleBackground = findViewById(R.id.ripple_background);
         btnPlayOrPause = findViewById(R.id.btn_play_or_pause);
         handleLayoutAudio(actionAudio);
@@ -276,15 +253,6 @@ public class AudioActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AudioService.class);
         intent.putExtra("run_time_audio_service", millisInFuture);
         this.startService(intent);
-    }
-
-    @Override
-    protected void onStop() {
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
-        super.onStop();
     }
 
     @Override

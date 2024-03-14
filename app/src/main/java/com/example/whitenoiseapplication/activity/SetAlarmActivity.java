@@ -161,11 +161,15 @@ public class SetAlarmActivity extends AppCompatActivity {
                     openSheetCustomRepeat(setting);
                 } else {
                     if (position == listRepeatSelection.size() - 2) {
-                        setWeekdayAlarm();
+                        setWeekdaysAlarm(true);
+                        setWeekendAlarm(false);
                         alarmCreating.setRepeatForDaysOfWeek(true);
                     }
-                    boolean recurring = position > 0;
-                    alarmCreating.setRecurring(recurring);
+                    if (position > 0){
+                        setWeekdaysAlarm(true);
+                        setWeekendAlarm(true);
+                        alarmCreating.setRecurring(true);
+                    }
                     setting.setContentItem(listRepeatSelection.get(position).getNameItem());
                     alarmCreating.setRepeatModeAlarm(listRepeatSelection.get(position).getNameItem());
                     tvTitle.setText(getTitleTimeDuration());
@@ -302,14 +306,17 @@ public class SetAlarmActivity extends AppCompatActivity {
         alarmCreating.setSunday(listSelectionDayOfWeek.get(6));
     }
 
-    private void setWeekdayAlarm() {
-        alarmCreating.setMonday(true);
-        alarmCreating.setTuesday(true);
-        alarmCreating.setWednesday(true);
-        alarmCreating.setThursday(true);
-        alarmCreating.setFriday(true);
-        alarmCreating.setSaturday(false);
-        alarmCreating.setSunday(false);
+    private void setWeekdaysAlarm(boolean isEnabled){
+        alarmCreating.setMonday(isEnabled);
+        alarmCreating.setTuesday(isEnabled);
+        alarmCreating.setWednesday(isEnabled);
+        alarmCreating.setThursday(isEnabled);
+        alarmCreating.setFriday(isEnabled);
+    }
+
+    private void setWeekendAlarm(boolean isEnabled){
+        alarmCreating.setSaturday(isEnabled);
+        alarmCreating.setSunday(isEnabled);
     }
 
     private String getTitleTimeDuration(){

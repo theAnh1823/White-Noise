@@ -29,6 +29,7 @@
     <string name="ok">OK</string>
     <string name="save">Lưu</string>
     <string name="off">Tắt</string>
+    <string name="turn_off">Tắt</string>
     <string name="delete">Xóa</string>
     <string name="undo">Hoàn tác</string>
 

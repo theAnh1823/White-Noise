@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,8 +35,8 @@ import com.example.whitenoiseapplication.adapter.FavAudioAdapter;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.listener.IClickItemBottemSheet;
 import com.example.whitenoiseapplication.model.Audio;
+import com.example.whitenoiseapplication.model.CountDownManager;
 import com.example.whitenoiseapplication.model.Setting;
-import com.example.whitenoiseapplication.model.TimeSingleton;
 import com.example.whitenoiseapplication.service.AudioService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -155,17 +154,6 @@ public class FavoriteAudioFragment extends Fragment {
         bottomSheetAudio = new BottomSheetAudio(audio, menuLists, new IClickItemBottemSheet() {
             @Override
             public void onItemClick(Setting setting) {
-                switch (setting.getNameItem()){
-                    case "Bỏ thích":
-                        clickUnFavoriteItem(audio);
-                        break;
-                    case "Chặn":
-                        showDialogConfirmBlock(audio);
-                        break;
-                    case "Bỏ chặn":
-                        unBlockItem(audio);
-                        break;
-                }
                 if (setting.getNameItem().equals(getString(R.string.unfavorite)))
                     clickUnFavoriteItem(audio);
                 else if (setting.getNameItem().equals(getString(R.string.block)))
@@ -253,11 +241,13 @@ public class FavoriteAudioFragment extends Fragment {
 
     private void resetCountDownTimer(Audio audio) {
         currentPlayingAudioId = audio.getId();
-        if (MainActivity.countDownTimer != null){
-            MainActivity.countDownTimer.cancel();
-            TimeSingleton.getInstance().setTimeRunning(false);
-            TimeSingleton.getInstance().setTimeRemaining(0);
-            MainActivity.countDownTimer = null;
+        try {
+            CountDownManager countDownManager = CountDownManager.getInstance();
+            if (countDownManager != null) {
+                countDownManager.resetTimer();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

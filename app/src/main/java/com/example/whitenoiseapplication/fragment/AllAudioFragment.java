@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,13 +33,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.AudioActivity;
-import com.example.whitenoiseapplication.activity.MainActivity;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.adapter.AudioAdapter;
 import com.example.whitenoiseapplication.listener.IClickItemBottemSheet;
 import com.example.whitenoiseapplication.model.Audio;
+import com.example.whitenoiseapplication.model.CountDownManager;
 import com.example.whitenoiseapplication.model.Setting;
-import com.example.whitenoiseapplication.model.TimeSingleton;
 import com.example.whitenoiseapplication.service.AudioService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -260,11 +258,13 @@ public class AllAudioFragment extends Fragment {
 
     private void resetCountDownTimer(Audio audio) {
         currentPlayingAudioId = audio.getId();
-        if (MainActivity.countDownTimer != null) {
-            MainActivity.countDownTimer.cancel();
-            TimeSingleton.getInstance().setTimeRunning(false);
-            TimeSingleton.getInstance().setTimeRemaining(0);
-            MainActivity.countDownTimer = null;
+        try {
+            CountDownManager countDownManager = CountDownManager.getInstance();
+            if (countDownManager != null) {
+                countDownManager.resetTimer();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

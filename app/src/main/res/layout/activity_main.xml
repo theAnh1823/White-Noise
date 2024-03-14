@@ -18,7 +18,7 @@
  <RelativeLayout
      android:id="@+id/layout_bottom_audio"
      android:layout_width="match_parent"
-     android:layout_height="@dimen/nofification_collapsed"
+     android:layout_height="@dimen/notification_collapsed"
      android:background="@color/medium_blue"
      android:visibility="gone"
      app:layout_constraintBottom_toTopOf="@id/bottom_nav"

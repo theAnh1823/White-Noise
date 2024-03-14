@@ -5,7 +5,7 @@ import android.util.Log;
 public class TimeSingleton {
     private static TimeSingleton timeSingleton;
     private long timeRemaining;
-    private boolean isTimeRunning;
+    private boolean isTimerRunning;
     private TimeSingleton() {
     }
     public static TimeSingleton getInstance(){
@@ -15,12 +15,12 @@ public class TimeSingleton {
         return timeSingleton;
     }
 
-    public boolean isTimeRunning() {
-        return isTimeRunning;
+    public boolean isTimerRunning() {
+        return isTimerRunning;
     }
 
-    public void setTimeRunning(boolean timeRunning) {
-        isTimeRunning = timeRunning;
+    public void setTimerRunning(boolean timerRunning) {
+        isTimerRunning = timerRunning;
     }
 
     public long getTimeRemaining() {

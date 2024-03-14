@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="nofification_collapsed">64dp</dimen>
+    <dimen name="notification_collapsed">64dp</dimen>
     <dimen name="text_size_repeat_alarm_checkbox">18sp</dimen>
     <dimen name="margin_start_repeat_alarm_checkbox">20dp</dimen>
     <dimen name="padding_start_repeat_alarm_checkbox">10dp</dimen>
