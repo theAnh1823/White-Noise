@@ -6,12 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.whitenoiseapplication.receiver.AlarmReceiver;
@@ -27,7 +24,8 @@ public class Alarm implements Serializable {
     @NonNull
     private int alarmId;
     private int alarmHour, alarmMinute;
-    private String titleAlarm, repeatModeAlarm, nameRingtoneAlarm;
+    private String titleAlarm;
+    private int repeatModeId, ringtoneId;
     private int ringToneAlarm;
     private boolean isAlarmEnabled, recurring, repeatForDaysOfWeek;
     private boolean monday, tuesday, wednesday, thursday, friday, saturday, sunday;
@@ -35,13 +33,13 @@ public class Alarm implements Serializable {
     public Alarm() {
     }
 
-    public Alarm(int alarmId, int alarmHour, int alarmMinute, String repeatModeAlarm, String titleAlarm, String nameRingtoneAlarm, int ringToneAlarm, boolean isAlarmEnabled, boolean recurring, boolean repeatForDaysOfWeek, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
+    public Alarm(int alarmId, int alarmHour, int alarmMinute, int repeatModeId, String titleAlarm, int ringtoneId, int ringToneAlarm, boolean isAlarmEnabled, boolean recurring, boolean repeatForDaysOfWeek, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
         this.alarmId = alarmId;
         this.alarmHour = alarmHour;
         this.alarmMinute = alarmMinute;
-        this.repeatModeAlarm = repeatModeAlarm;
+        this.repeatModeId = repeatModeId;
         this.titleAlarm = titleAlarm;
-        this.nameRingtoneAlarm = nameRingtoneAlarm;
+        this.ringtoneId = ringtoneId;
         this.ringToneAlarm = ringToneAlarm;
         this.isAlarmEnabled = isAlarmEnabled;
         this.recurring = recurring;
@@ -148,12 +146,20 @@ public class Alarm implements Serializable {
         this.alarmMinute = alarmMinute;
     }
 
-    public String getRepeatModeAlarm() {
-        return repeatModeAlarm;
+    public int getRepeatModeId() {
+        return repeatModeId;
     }
 
-    public void setRepeatModeAlarm(String repeatModeAlarm) {
-        this.repeatModeAlarm = repeatModeAlarm;
+    public void setRepeatModeId(int repeatModeId) {
+        this.repeatModeId = repeatModeId;
+    }
+
+    public int getRingtoneId() {
+        return ringtoneId;
+    }
+
+    public void setRingtoneId(int ringtoneId) {
+        this.ringtoneId = ringtoneId;
     }
 
     public String getTitleAlarm() {
@@ -162,14 +168,6 @@ public class Alarm implements Serializable {
 
     public void setTitleAlarm(String titleAlarm) {
         this.titleAlarm = titleAlarm;
-    }
-
-    public String getNameRingtoneAlarm() {
-        return nameRingtoneAlarm;
-    }
-
-    public void setNameRingtoneAlarm(String nameRingtoneAlarm) {
-        this.nameRingtoneAlarm = nameRingtoneAlarm;
     }
 
     public int getRingToneAlarm() {
@@ -258,28 +256,5 @@ public class Alarm implements Serializable {
 
     public void setSunday(boolean sunday) {
         this.sunday = sunday;
-    }
-
-    @Override
-    public String toString() {
-        return "Alarm{" +
-                "alarmId=" + alarmId +
-                ", alarmHour=" + alarmHour +
-                ", alarmMinute=" + alarmMinute +
-                ", titleAlarm='" + titleAlarm + '\'' +
-                ", repeatModeAlarm='" + repeatModeAlarm + '\'' +
-                ", nameRingtoneAlarm='" + nameRingtoneAlarm + '\'' +
-                ", ringToneAlarm=" + ringToneAlarm +
-                ", isAlarmEnabled=" + isAlarmEnabled +
-                ", recurring=" + recurring +
-                ", repeatForDaysOfWeek=" + repeatForDaysOfWeek +
-                ", monday=" + monday +
-                ", tuesday=" + tuesday +
-                ", wednesday=" + wednesday +
-                ", thursday=" + thursday +
-                ", friday=" + friday +
-                ", saturday=" + saturday +
-                ", sunday=" + sunday +
-                '}';
     }
 }

@@ -1,27 +1,27 @@
 package com.example.whitenoiseapplication.model;
 
 public class AlarmSetting {
-    String nameItem;
+    int idName;
     int resourceAudio;
     boolean isSelected;
 
-    public AlarmSetting(String nameItem, boolean isSelected) {
-        this.nameItem = nameItem;
+    public AlarmSetting(int idName, boolean isSelected) {
+        this.idName = idName;
         this.isSelected = isSelected;
     }
 
-    public AlarmSetting(String nameItem, int resourceAudio, boolean isSelected) {
-        this.nameItem = nameItem;
+    public AlarmSetting(int idName, int resourceAudio, boolean isSelected) {
+        this.idName = idName;
         this.resourceAudio = resourceAudio;
         this.isSelected = isSelected;
     }
 
-    public String getNameItem() {
-        return nameItem;
+    public int getIdName() {
+        return idName;
     }
 
-    public void setNameItem(String nameItem) {
-        this.nameItem = nameItem;
+    public void setIdName(int idName) {
+        this.idName = idName;
     }
 
     public int getResourceAudio() {

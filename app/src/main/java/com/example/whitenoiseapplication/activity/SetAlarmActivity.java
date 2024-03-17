@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -26,6 +25,7 @@ import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.model.AlarmSetting;
 import com.example.whitenoiseapplication.model.Setting;
 import com.example.whitenoiseapplication.util.DateTimeInterval;
+import com.example.whitenoiseapplication.util.DayIdsStringConverter;
 import com.example.whitenoiseapplication.util.LocaleHelper;
 import com.example.whitenoiseapplication.util.TimePickerUtil;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
@@ -163,15 +163,14 @@ public class SetAlarmActivity extends AppCompatActivity {
                     if (position == listRepeatSelection.size() - 2) {
                         setWeekdaysAlarm(true);
                         setWeekendAlarm(false);
-                        alarmCreating.setRepeatForDaysOfWeek(true);
                     }
                     if (position > 0){
                         setWeekdaysAlarm(true);
                         setWeekendAlarm(true);
                         alarmCreating.setRecurring(true);
                     }
-                    setting.setContentItem(listRepeatSelection.get(position).getNameItem());
-                    alarmCreating.setRepeatModeAlarm(listRepeatSelection.get(position).getNameItem());
+                    setting.setContentItem(getString(listRepeatSelection.get(position).getIdName()));
+                    alarmCreating.setRepeatModeId(listRepeatSelection.get(position).getIdName());
                     tvTitle.setText(getTitleTimeDuration());
                     setAlarmAdapter.notifyDataSetChanged();
                 }
@@ -185,11 +184,11 @@ public class SetAlarmActivity extends AppCompatActivity {
     private void openSheetCustomRepeat(Setting setting) {
         sheetCustomAlarmRepeat = new BottomSheetCustomAlarmRepeat();
         sheetCustomAlarmRepeat.show(this.getSupportFragmentManager(), bottomSheetSetAlarm.getTag());
-        sheetCustomAlarmRepeat.setAlarmRepeatListener((strListDayOfWeek, list, selections) -> {
+        sheetCustomAlarmRepeat.setAlarmRepeatListener((selections) -> {
             listSelectionDayOfWeek = selections;
             setRepeatedAlarmDayOfWeek();
-            setting.setContentItem(strListDayOfWeek);
-            alarmCreating.setRepeatModeAlarm(strListDayOfWeek);
+            setting.setContentItem(DayIdsStringConverter.getStringDaysOfWeek(alarmCreating, context));
+            alarmCreating.setRepeatModeId(R.string.custom);
             alarmCreating.setRecurring(true);
             alarmCreating.setRepeatForDaysOfWeek(true);
             tvTitle.setText(getTitleTimeDuration());
@@ -206,8 +205,8 @@ public class SetAlarmActivity extends AppCompatActivity {
                 bottomSheetSetAlarm.setSaveListener(new BottomSheetSetAlarm.SaveListener() {
                     @Override
                     public void saveAlarmSetting() {
-                        setting.setContentItem(listAlarmSound.get(position).getNameItem());
-                        alarmCreating.setNameRingtoneAlarm(listAlarmSound.get(position).getNameItem());
+                        setting.setContentItem(getString(listAlarmSound.get(position).getIdName()));
+                        alarmCreating.setRingtoneId(listAlarmSound.get(position).getIdName());
                         alarmCreating.setRingToneAlarm(listAlarmSound.get(position).getResourceAudio());
                         setAlarmAdapter.notifyDataSetChanged();
                         bottomSheetSetAlarm.dismiss();
@@ -228,39 +227,39 @@ public class SetAlarmActivity extends AppCompatActivity {
 
     private List<Setting> getListSettingExistAlarm(Alarm alarmCreating) {
         List<Setting> list = new ArrayList<>();
-        list.add(new Setting(getString(R.string.alarm_sound), alarmCreating.getNameRingtoneAlarm()));
-        list.add(new Setting(getString(R.string.repeat_alarm), alarmCreating.getRepeatModeAlarm()));
+        list.add(new Setting(getString(R.string.alarm_sound), getString(alarmCreating.getRingtoneId())));
+        list.add(new Setting(getString(R.string.repeat_alarm), getString(alarmCreating.getRepeatModeId())));
         list.add(new Setting(getString(R.string.label), alarmCreating.getTitleAlarm()));
         return list;
     }
 
     private List<AlarmSetting> getListAlarmSound() {
         List<AlarmSetting> list = new ArrayList<>();
-        list.add(new AlarmSetting(getString(R.string.default_setting), R.raw.default_ringtone, false));
-        list.add(new AlarmSetting(getString(R.string.rooster_crow), R.raw.morning_rooster, false));
-        list.add(new AlarmSetting(getString(R.string.piano), R.raw.piano_ringtone, false));
-        list.add(new AlarmSetting(getString(R.string.beep_ringtone), R.raw.beep_ringtone, false));
-        list.add(new AlarmSetting(getString(R.string.bell_ringtone), R.raw.bell_ringtone, false));
+        list.add(new AlarmSetting(R.string.default_setting, R.raw.default_ringtone, false));
+        list.add(new AlarmSetting(R.string.rooster_crow, R.raw.morning_rooster, false));
+        list.add(new AlarmSetting(R.string.piano, R.raw.piano_ringtone, false));
+        list.add(new AlarmSetting(R.string.beep_ringtone, R.raw.beep_ringtone, false));
+        list.add(new AlarmSetting(R.string.bell_ringtone, R.raw.bell_ringtone, false));
 
-        setItemToTrue(list, alarmCreating.getNameRingtoneAlarm());
+        setItemToTrue(list, getString(alarmCreating.getRingtoneId()));
         return list;
     }
 
     private List<AlarmSetting> getListRepeatSelection() {
         List<AlarmSetting> list = new ArrayList<>();
-        list.add(new AlarmSetting(getString(R.string.once), false));
-        list.add(new AlarmSetting(getString(R.string.daily), false));
-        list.add(new AlarmSetting(getString(R.string.mon_to_fri), false));
-        list.add(new AlarmSetting(getString(R.string.custom), false));
+        list.add(new AlarmSetting(R.string.once, false));
+        list.add(new AlarmSetting(R.string.daily, false));
+        list.add(new AlarmSetting(R.string.mon_to_fri, false));
+        list.add(new AlarmSetting(R.string.custom, false));
 
-        setItemToTrue(list, alarmCreating.getRepeatModeAlarm());
+        setItemToTrue(list, getString(alarmCreating.getRepeatModeId()));
         return list;
     }
 
     private void setItemToTrue(List<AlarmSetting> list, String str) {
         if (adjustExistingAlarm) {
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getNameItem().equals(str)) {
+                if (getString(list.get(i).getIdName()).equals(str)) {
                     list.get(i).setSelected(true);
                 }
             }
@@ -291,9 +290,10 @@ public class SetAlarmActivity extends AppCompatActivity {
         alarmCreating.setAlarmHour(calendar.get(Calendar.HOUR_OF_DAY));
         alarmCreating.setAlarmMinute(calendar.get(Calendar.MINUTE));
         alarmCreating.setRingToneAlarm(R.raw.default_ringtone);
-        alarmCreating.setNameRingtoneAlarm(getString(R.string.default_setting));
-        alarmCreating.setRepeatModeAlarm(getString(R.string.once));
+        alarmCreating.setRingtoneId(R.string.default_setting);
+        alarmCreating.setRepeatModeId(R.string.once);
         alarmCreating.setRecurring(false);
+        alarmCreating.setRepeatForDaysOfWeek(false);
     }
 
     private void setRepeatedAlarmDayOfWeek() {

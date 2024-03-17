@@ -15,10 +15,12 @@ public final class DateTimeInterval {
     public static String getDateTimeInterval(Alarm alarm, Context context) {
         Calendar calendar = Calendar.getInstance();
         strDateTimeDuration = context.getString(R.string.alarm_in);
-        String settingRepeatAlarm = alarm.getRepeatModeAlarm();
+        String settingRepeatAlarm = context.getString(alarm.getRepeatModeId());
         if (settingRepeatAlarm.equals(context.getString(R.string.mon_to_fri))) {
-            if (calendar.get(Calendar.DAY_OF_WEEK) >= 5)
-                setDateDuration(Calendar.MONDAY, context);
+            if (calendar.get(Calendar.DAY_OF_WEEK) >= 5) {
+                if (isAfterCurrent(alarm))
+                    setDateDuration(Calendar.MONDAY, context);
+            }
         } else if (!settingRepeatAlarm.equals(context.getString(R.string.once)) && !settingRepeatAlarm.equals(context.getString(R.string.daily))) {
             setDateDuration(findNearestDay(alarm), context);
         }
@@ -67,6 +69,18 @@ public final class DateTimeInterval {
             }
         }
         return listDayOfWeek.get(0);
+    }
+
+    private static boolean isAfterCurrent(Alarm alarm) {
+        Calendar currentTime = Calendar.getInstance();
+
+        Calendar targetTime = Calendar.getInstance();
+        targetTime.set(Calendar.HOUR_OF_DAY, alarm.getAlarmHour());
+        targetTime.set(Calendar.MINUTE, alarm.getAlarmMinute());
+        targetTime.set(Calendar.SECOND, 0);
+        targetTime.set(Calendar.MILLISECOND, 0);
+
+        return currentTime.after(targetTime);
     }
 
     private static List<Integer> getListDayOfWeek(Alarm alarm) {

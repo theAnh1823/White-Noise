@@ -18,6 +18,7 @@ import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.listener.IClickItemAlarm;
 import com.example.whitenoiseapplication.listener.OnSwitchCompatListener;
 import com.example.whitenoiseapplication.model.Alarm;
+import com.example.whitenoiseapplication.util.DayIdsStringConverter;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
 import com.example.whitenoiseapplication.viewmodel.CreateAlarmViewModel;
 
@@ -54,8 +55,13 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         if (alarm != null) {
             holder.tvAlarmTime.setText(String.format("%02d", alarm.getAlarmHour()) + ":" + String.format("%02d", alarm.getAlarmMinute()));
 
-            String contentItemAlarm = alarm.getRepeatModeAlarm();
-            if (!alarm.getTitleAlarm().isEmpty()){
+            String contentItemAlarm = "";
+            if (alarm.isRepeatForDaysOfWeek()) {
+                contentItemAlarm = DayIdsStringConverter.getStringDaysOfWeek(alarm, context);
+            } else {
+                contentItemAlarm = context.getString(alarm.getRepeatModeId());
+            }
+            if (!alarm.getTitleAlarm().isEmpty()) {
                 contentItemAlarm += " | " + alarm.getTitleAlarm();
             }
             holder.tvContentAlarm.setText(contentItemAlarm);

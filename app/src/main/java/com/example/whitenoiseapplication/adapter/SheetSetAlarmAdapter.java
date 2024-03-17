@@ -2,7 +2,6 @@ package com.example.whitenoiseapplication.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,7 @@ public class SheetSetAlarmAdapter extends RecyclerView.Adapter<SheetSetAlarmAdap
     public void onBindViewHolder(@NonNull SetAlarmHolder holder, @SuppressLint("RecyclerView") int position) {
         AlarmSetting itemSheet = mList.get(position);
         if (itemSheet != null) {
-            holder.tvBottemSheet.setText(itemSheet.getNameItem());
+            holder.tvBottemSheet.setText(context.getString(itemSheet.getIdName()));
             holder.tvBottemSheet.setTextColor(ContextCompat.getColor(context, R.color.black));
             if (itemSheet.isSelected()) {
                 holder.layoutBottemSheet.setBackgroundResource(R.color.pale_turquoise);
