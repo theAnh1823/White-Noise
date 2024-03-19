@@ -3,12 +3,17 @@ Introduction
 -----------------
 White Noise is a powerful Android application providing high-quality white noise along with diverse alarm features. With a wide collection of white noise sounds, users can customize a peaceful environment for relaxation, focus, or sleep. 
 Additionally, the flexible alarm feature allows you to set personal preferences, ensuring a pleasant and comfortable waking experience. Explore White Noise now to create an ideal sound environment for every moment of the day!
+### APK
+Download apk file here [White Noise v1.0](https://drive.google.com/file/d/1tOANggqFFrNzfqA8xOh8ZUZcM7vFAEHP/view?usp=sharing)
+```
+https://drive.google.com/file/d/1tOANggqFFrNzfqA8xOh8ZUZcM7vFAEHP/view?usp=sharing
+```
 ## Features
 - Diverse white noise: Choose from a rich collection of white noise sounds, including ocean waves, rain sounds, and more to create a serene and relaxing environment.
 - Search functionality: Effortlessly search for specific sounds using keywords.
 - Add to favorites: Easily add your favorite sounds to the favorites list with just a single tap.
 - Sound timer: Users can set a timer to automatically turn off the sound after a certain period of time. This helps create a quiet space after sleeping, concentrating, or relaxing.
-- Background sound layback: Allows users to select and play a background sound while using the app
+- Background sound playback: Allows users to select and play a background sound while using the app
 - Sleep time calculation: Calculate the optimal bedtime based on desired wake-up time and recommended sleep duration.
 - Flexible alarm: Set alarms to your preference with options for sound, repeat frequency, and alarm labels.
 - Language switching: Allows users to switch between English and Vietnamese to accommodate their preferences and experience the app in their preferred language.
@@ -70,3 +75,25 @@ src="https://github.com/theAnh1823/White-Noise/assets/113270703/1e746fb7-4a94-4c
 </table>
   </div>
 </br>
+
+## Specs / Open-source libraries:
+- Minimum **SDK 21**
+- **MVC**-architecture
+- [**Appcompat**](https://developer.android.com/jetpack/androidx/releases/appcompat) provides backward compatibility and Material Design support in Android app development.
+- [**Material**](https://github.com/material-components/material-components-android) provides Material Design user interface components for Android applications.
+- [**Recyclerview**](https://developer.android.com/jetpack/androidx/releases/recyclerview) display data lists efficiently and flexibly in the application.
+- [**Firebase**](https://firebase.google.com/docs/android/setup) provides essential cloud services like real-time database, analytics, authentication, and push notifications for app development.
+- [**Room Database**](https://developer.android.com/jetpack/androidx/releases/room) offering a convenient way to work with SQLite databases in Android applications.
+- [**ViewModel**](https://developer.android.com/topic/libraries/architecture/viewmodel) preserves and manages data across the lifecycle of Android components like Activity and Fragment.
+- [**LiveData**](https://developer.android.com/topic/libraries/architecture/livedata) allows observation and notification of data changes in Android.
+- [**Media**](https://developer.android.com/jetpack/androidx/releases/media?hl=vi) provides tools and features related to audio playback, video playback, and media management on Android devices.
+- [**Bumptech Glide**](https://github.com/bumptech/glide) used to load and display images from various sources.
+- [**Picasso**](https://github.com/square/picasso) used to load and display images from various sources.
+- [**Glide Transformations**](https://github.com/wasabeef/glide-transformations) extends Glide library to apply image transformation effects like crop, rotate, blur, etc., before displaying them.
+- [**Ripple Background**](https://github.com/skyfishjy/android-ripple-background) used to create ripple effects.
+- [**Circle Button**](https://github.com/markushi/android-circlebutton) circle button widget for Android.
+- [**No Internet dialog**](https://github.com/ImaginativeShohag/Oops-No-Internet) displays a notification when there is no internet connection in the app.
+- **Android Support Libraries**
+
+## Authors
+- [Nguyen The Anh](https://github.com/theAnh1823)
