@@ -83,7 +83,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
             });
         } else if (holder instanceof ChangeLanguageHolder) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("pref_switch_language", MODE_PRIVATE);
-            ((ChangeLanguageHolder) holder).switchLanguage.setChecked(sharedPreferences.getBoolean("value", true));
+            ((ChangeLanguageHolder) holder).switchLanguage.setChecked(sharedPreferences.getBoolean("value", false));
             ((ChangeLanguageHolder) holder).switchLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

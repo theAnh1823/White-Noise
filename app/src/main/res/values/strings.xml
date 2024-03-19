@@ -100,9 +100,18 @@
     <string name="header_result_sleep_calculate">Một người trung bình mất khoảng 15 phút để chìm vào giấc ngủ</string>
     <string name="body_result_sleep_by_time">Bạn nên cố gắng đi ngủ vào một trong những thời điểm sau:</string>
     <string name="body_result_sleep_now">Nếu bạn đi ngủ ngay bây giờ, bạn nên cố gắng thức dậy vào một trong những thời điểm sau:</string>
-    <string name="bottem_result_sleep_calculate">Nếu bạn thức dậy vào một trong những thời điểm này, bạn sẽ thức giấc giữa các chu kỳ ngủ 90 phút. Một giấc ngủ ngon bao gồm 5–6 chu kỳ hoàn chỉnh</string>
+    <string name="bottom_result_sleep_calculate">Nếu bạn thức dậy vào một trong những thời điểm này, bạn sẽ thức giấc giữa các chu kỳ ngủ 90 phút. Một giấc ngủ ngon bao gồm 5–6 chu kỳ hoàn chỉnh</string>
     <string name="hours_of_sleep">giờ ngủ</string>
     <string name="sleep_cycles">chu kỳ ngủ.</string>
     <string name="blocked_list">Danh sách bị chặn</string>
     <string name="manage_notifications">Cài đặt thông báo</string>
+
+    <string name="no_internet">Không có kết nối mạng</string>
+    <string name="no_internet_connection_message">Một số tính năng sẽ không hoạt động đúng cách nếu không có kết nối mạng.</string>
+    <string name="airplane_mode_message">Bạn đang bật chế độ máy bay.</string>
+    <string name="wifi">Wifi</string>
+    <string name="mobile_data">Dữ liệu di động</string>
+    <string name="airplane_mode">Chế độ máy bay</string>
+    <string name="please_turn_on">Vui lòng bật</string>
+    <string name="please_turn_off">Vui lòng tắt</string>
 </resources>

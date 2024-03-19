@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/bottem_result_sleep_calculate"
+            android:text="@string/bottom_result_sleep_calculate"
             android:textColor="@color/white"
             android:alpha="0.7"
             android:typeface="serif"

@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
             sendActionToService(AudioService.ACTION_CLOSE);
             tvCountDown.setVisibility(View.GONE);
         });
-//        setCountDownTimer();
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("send_data_to_activity"));
 
         SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);

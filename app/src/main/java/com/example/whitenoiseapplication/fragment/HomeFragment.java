@@ -15,10 +15,12 @@ import com.example.whitenoiseapplication.adapter.HomePager2Adapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.imaginativeworld.oopsnointernet.dialogs.pendulum.DialogPropertiesPendulum;
+import org.imaginativeworld.oopsnointernet.dialogs.pendulum.NoInternetDialogPendulum;
+
 public class HomeFragment extends Fragment {
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager2;
-    private HomePager2Adapter pager2Adapter;
     private View mView;
 
     @Nullable
@@ -27,8 +29,9 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         mView = inflater.inflate(R.layout.home_fragment, container, false);
         initView();
+        showInternetStatusDialog();
 
-        pager2Adapter = new HomePager2Adapter(this);
+        HomePager2Adapter pager2Adapter = new HomePager2Adapter(this);
         mViewPager2.setAdapter(pager2Adapter);
 
         new TabLayoutMediator(mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -50,6 +53,31 @@ public class HomeFragment extends Fragment {
     private void initView() {
         mTabLayout = mView.findViewById(R.id.tab_layout);
         mViewPager2 = mView.findViewById(R.id.home_viewpager2);
+    }
+
+    private void showInternetStatusDialog() {
+        NoInternetDialogPendulum.Builder builder = new NoInternetDialogPendulum.Builder(
+                requireActivity(),
+                getLifecycle()
+        );
+
+        DialogPropertiesPendulum properties = builder.getDialogProperties();
+
+        properties.setCancelable(true);
+        properties.setNoInternetConnectionTitle(getString(R.string.no_internet));
+        properties.setNoInternetConnectionMessage(getString(R.string.no_internet_connection_message));
+        properties.setShowInternetOnButtons(true);
+        properties.setPleaseTurnOnText(getString(R.string.please_turn_on));
+        properties.setWifiOnButtonText(getString(R.string.wifi));
+        properties.setMobileDataOnButtonText(getString(R.string.mobile_data));
+
+        properties.setOnAirplaneModeTitle(getString(R.string.no_internet));
+        properties.setOnAirplaneModeMessage(getString(R.string.airplane_mode_message));
+        properties.setPleaseTurnOffText(getString(R.string.please_turn_off));
+        properties.setAirplaneModeOffButtonText(getString(R.string.airplane_mode));
+        properties.setShowAirplaneModeOffButtons(true);
+
+        builder.build();
     }
 
     @Override

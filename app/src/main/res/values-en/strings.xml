@@ -103,6 +103,15 @@
     <string name="header_result_sleep_calculate">It takes the average person about 15 minutes to fall asleep</string>
     <string name="body_result_sleep_by_time">You should try to go to bed at one of the following times:</string>
     <string name="body_result_sleep_now">If you go to bed now, you should try to wake up at one of the following times:</string>
-    <string name="bottem_result_sleep_calculate">If you wake up at one of these times, you will wake up between 90-minute sleep cycles. A good night\'s sleep consists of 5–6 complete cycles</string>
+    <string name="bottom_result_sleep_calculate">If you wake up at one of these times, you will wake up between 90-minute sleep cycles. A good night\'s sleep consists of 5–6 complete cycles</string>
     <string name="hours_of_sleep">hours of sleep</string>
+
+    <string name="no_internet">No Internet</string>
+    <string name="no_internet_connection_message">Without a network connection, some features may not work properly.</string>
+    <string name="airplane_mode_message">You have turned on the airplane mode.</string>
+    <string name="wifi">Wifi</string>
+    <string name="mobile_data">Mobile data</string>
+    <string name="airplane_mode">Airplane mode</string>
+    <string name="please_turn_on">Please turn on</string>
+    <string name="please_turn_off">Please turn off</string>
 </resources>
