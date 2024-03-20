@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.AudioActivity;
 import com.example.whitenoiseapplication.adapter.AudioAdapter;
+import com.example.whitenoiseapplication.adapter.FavAudioAdapter;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.listener.IClickItemBottomSheet;
 import com.example.whitenoiseapplication.model.Audio;
@@ -49,7 +50,7 @@ import java.util.List;
 
 public class FavoriteAudioFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private AudioAdapter mAudioAdapter;
+    private FavAudioAdapter mFavAudioAdapter;
     private GridLayoutManager mGridLayoutManager;
     private LinearLayoutManager mLinearLayoutManager;
     private BottomSheetAudio bottomSheetAudio;
@@ -68,7 +69,7 @@ public class FavoriteAudioFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mListAudio = getListFavoriteAudio();
-        mAudioAdapter = new AudioAdapter(getActivity(), mListAudio, new IClickItemAudioListener() {
+        mFavAudioAdapter = new FavAudioAdapter(getActivity(), mListAudio, new IClickItemAudioListener() {
             @Override
             public void onClickItemAudio(Audio audio) {
                 if (audio.isBlocked()) {
@@ -92,7 +93,7 @@ public class FavoriteAudioFragment extends Fragment {
                 clickUnFavoriteItem(audio);
             }
         });
-        mRecyclerView.setAdapter(mAudioAdapter);
+        mRecyclerView.setAdapter(mFavAudioAdapter);
         return view;
     }
 
@@ -206,7 +207,7 @@ public class FavoriteAudioFragment extends Fragment {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("list_audios");
         audio.setBlocked(true);
         mDatabase.child("" + audio.getId()).updateChildren(audio.toMap());
-        mAudioAdapter.notifyDataSetChanged();
+        mFavAudioAdapter.notifyDataSetChanged();
         Toast.makeText(getActivity(), getString(R.string.noti_toast_block), Toast.LENGTH_SHORT).show();
     }
 
@@ -215,7 +216,7 @@ public class FavoriteAudioFragment extends Fragment {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("list_audios");
         audio.setBlocked(false);
         mDatabase.child("" + audio.getId()).updateChildren(audio.toMap());
-        mAudioAdapter.notifyDataSetChanged();
+        mFavAudioAdapter.notifyDataSetChanged();
         Toast.makeText(getActivity(), getString(R.string.noti_toast_unblock), Toast.LENGTH_SHORT).show();
     }
 
@@ -224,7 +225,7 @@ public class FavoriteAudioFragment extends Fragment {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("list_audios");
         audio.setFavorite(false);
         mDatabase.child("" + audio.getId()).updateChildren(audio.toMap());
-        mAudioAdapter.notifyDataSetChanged();
+        mFavAudioAdapter.notifyDataSetChanged();
         Toast.makeText(getActivity(), getString(R.string.noti_toast_unfavortite), Toast.LENGTH_SHORT).show();
     }
 
@@ -268,13 +269,13 @@ public class FavoriteAudioFragment extends Fragment {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mAudioAdapter.getFilter().filter(query);
+                mFavAudioAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mAudioAdapter.getFilter().filter(newText);
+                mFavAudioAdapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -311,7 +312,7 @@ public class FavoriteAudioFragment extends Fragment {
             setTypeDisplayRecycleView(Audio.TYPE_GRID);
             mRecyclerView.setLayoutManager(mGridLayoutManager);
         }
-        mAudioAdapter.notifyDataSetChanged();
+        mFavAudioAdapter.notifyDataSetChanged();
         setIconMenu();
     }
 
@@ -344,7 +345,7 @@ public class FavoriteAudioFragment extends Fragment {
                         mList.add(audio);
                     }
                 }
-                mAudioAdapter.notifyDataSetChanged();
+                mFavAudioAdapter.notifyDataSetChanged();
                 setTypeDisplayRecycleView(mCurrentTypeDisplay);
             }
 

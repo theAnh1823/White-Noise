@@ -62,12 +62,11 @@ public class AudioActivity extends AppCompatActivity {
 
         getExtrasFromMainActivity();
         handleLayoutAudio(actionAudio);
-        countDownManager = CountDownManager.initInstance(ActivityMainBinding.inflate(getLayoutInflater()).tvCountdownTimer, () -> {
+        countDownManager = CountDownManager.initInstance(MainActivity.binding.tvCountdownTimer, () -> {
             sendActionToService(AudioService.ACTION_CLOSE);
             binding.tvCountdownTimer.setVisibility(View.GONE);
         });
         countDownManager.setTvAudioActivity(binding.tvCountdownTimer);
-//        setCountDownTimer();
 
         Glide.with(this).load(mAudio.getImageResource()).centerCrop().transform(new BlurTransformation(25, 5)).into(new CustomTarget<Drawable>() {
             @Override
@@ -83,11 +82,12 @@ public class AudioActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("send_data_to_activity"));
 
+        binding.tvNameActivityAudio.setText(mAudio.getNameAudio());
+        binding.imgTimerCircle.setOnClickListener(v -> openDialogSetTimer());
+
         binding.btnBackActivityAudio.setOnClickListener(v -> {
             getOnBackPressedDispatcher().onBackPressed();
         });
-
-        binding.imgTimerCircle.setOnClickListener(v -> openDialogSetTimer());
 
         binding.btnPlayOrPause.setOnClickListener(v -> {
             if (isPlaying) {

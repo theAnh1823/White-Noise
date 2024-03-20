@@ -26,7 +26,7 @@ import com.example.whitenoiseapplication.util.LocaleHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
+    public static ActivityMainBinding binding;
     private CountDownManager countDownManager;
     private Audio mAudio;
     private boolean isPlaying;
