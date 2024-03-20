@@ -1,7 +1,7 @@
 package com.example.whitenoiseapplication.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,21 +23,18 @@ import com.example.whitenoiseapplication.model.Audio;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHolder> implements Filterable {
-    private Context context;
+    private final Context context;
     private List<Audio> mListAudio;
-    private List<Audio> mListAudioOld;
+    private final List<Audio> mListAudioOld;
     private static IClickItemAudioListener iClickItemAudioListener;
 
     public AudioAdapter(Context context, List<Audio> mListAudio, IClickItemAudioListener listener) {
         this.context = context;
         this.mListAudio = mListAudio;
         this.mListAudioOld = mListAudio;
-        this.iClickItemAudioListener = listener;
+        iClickItemAudioListener = listener;
     }
 
     @Override
@@ -79,31 +76,17 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHol
             holder.tvAudio.setTextColor(color);
             holder.btnMore.setImageResource(R.drawable.more_vert_white);
         }
-        holder.btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iClickItemAudioListener.onClickMore(audio);
-            }
+        holder.btnMore.setOnClickListener(v -> {
+            iClickItemAudioListener.onClickMore(audio);
         });
 
         if (audio.isFavorite()) {
             holder.imgFavorite.setVisibility(View.VISIBLE);
-            holder.imgFavorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    iClickItemAudioListener.onClickFavorite(audio);
-                }
-            });
+            holder.imgFavorite.setOnClickListener(v -> iClickItemAudioListener.onClickFavorite(audio));
         } else {
             holder.imgFavorite.setVisibility(View.GONE);
         }
-
-        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iClickItemAudioListener.onClickItemAudio(audio);
-            }
-        });
+        holder.layoutItem.setOnClickListener(v -> iClickItemAudioListener.onClickItemAudio(audio));
     }
 
     @Override
@@ -137,6 +120,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHol
                 return filterResults;
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 mListAudio = (List<Audio>) results.values;
@@ -146,10 +130,11 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHol
     }
 
     public static class AudioViewHolder extends RecyclerView.ViewHolder {
-        private ConstraintLayout layoutItem;
-        private ImageView imgAudio, imgFavorite;
-        private TextView tvAudio;
-        private ImageButton btnMore;
+        private final ConstraintLayout layoutItem;
+        private final ImageView imgAudio;
+        private final ImageView imgFavorite;
+        private final TextView tvAudio;
+        private final ImageButton btnMore;
 
         public AudioViewHolder(@NonNull View itemView) {
             super(itemView);

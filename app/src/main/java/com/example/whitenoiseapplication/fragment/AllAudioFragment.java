@@ -17,9 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,9 +30,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.AudioActivity;
+import com.example.whitenoiseapplication.databinding.AllAudiosFragmentBinding;
+import com.example.whitenoiseapplication.databinding.LayoutDialogBlockedBinding;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.adapter.AudioAdapter;
-import com.example.whitenoiseapplication.listener.IClickItemBottemSheet;
+import com.example.whitenoiseapplication.listener.IClickItemBottomSheet;
 import com.example.whitenoiseapplication.model.Audio;
 import com.example.whitenoiseapplication.model.CountDownManager;
 import com.example.whitenoiseapplication.model.Setting;
@@ -50,11 +49,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllAudioFragment extends Fragment {
-    private RecyclerView mRecyclerView;
+    private AllAudiosFragmentBinding binding;
     private AudioAdapter mAudioAdapter;
     private GridLayoutManager mGridLayoutManager;
     private LinearLayoutManager mLinearLayoutManager;
-    private SearchView mSearchView;
     private BottomSheetAudio mBottomSheetAudio;
     private int mCurrentTypeDisplay = Audio.TYPE_GRID;
     private List<Audio> mListAudio;
@@ -66,12 +64,11 @@ public class AllAudioFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.all_audios_fragment, container, false);
-        mRecyclerView = view.findViewById(R.id.rcv_home_all_sounds);
+        binding = AllAudiosFragmentBinding.inflate(inflater, container, false);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mListAudio = getListAudio();
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        binding.rcvHomeAllSounds.setLayoutManager(mGridLayoutManager);
         mAudioAdapter = new AudioAdapter(getActivity(), mListAudio, new IClickItemAudioListener() {
             @Override
             public void onClickItemAudio(Audio audio) {
@@ -96,9 +93,9 @@ public class AllAudioFragment extends Fragment {
                 clickUnFavoriteItem(audio);
             }
         });
-        mRecyclerView.setAdapter(mAudioAdapter);
+        binding.rcvHomeAllSounds.setAdapter(mAudioAdapter);
 
-        return view;
+        return binding.getRoot();
     }
 
     private void openAudioActivity(Audio audio) {
@@ -112,15 +109,12 @@ public class AllAudioFragment extends Fragment {
     }
 
     private void showDialogUnBlocked(@NonNull Audio audio) {
-        Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.layout_dialog_blocked);
+        LayoutDialogBlockedBinding blockedBinding = LayoutDialogBlockedBinding.inflate(getLayoutInflater());
+        Dialog dialog = new Dialog(requireActivity());
+        dialog.setContentView(blockedBinding.getRoot());
         dialog.setCancelable(false);
-        Button btnUnBlocked = dialog.findViewById(R.id.btn_dialog_unblocked);
-        Button btnCancel = dialog.findViewById(R.id.btn_bottom_sheet_cancel);
-        ImageView imgAudio = dialog.findViewById(R.id.img_audio_dialog);
-        TextView tvNameAudio = dialog.findViewById(R.id.tv_name_audio);
-        tvNameAudio.setText(audio.getNameAudio());
-        Glide.with(getActivity()).load(audio.getImageResource()).into(imgAudio);
+        blockedBinding.tvNameAudio.setText(audio.getNameAudio());
+        Glide.with(requireActivity()).load(audio.getImageResource()).into(blockedBinding.imgAudioDialog);
 
         Window window = dialog.getWindow();
         assert window != null;
@@ -128,18 +122,11 @@ public class AllAudioFragment extends Fragment {
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnUnBlocked.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unBlockItem(audio);
-                dialog.dismiss();
-            }
+
+        blockedBinding.btnCancel.setOnClickListener(v -> dialog.dismiss());
+        blockedBinding.btnDialogUnblocked.setOnClickListener(v -> {
+            unBlockItem(audio);
+            dialog.dismiss();
         });
         dialog.show();
     }
@@ -151,7 +138,7 @@ public class AllAudioFragment extends Fragment {
         List<Setting> menuLists = new ArrayList<>();
         menuLists.add(new Setting(1, imageFavResource, favoriteContent));
         menuLists.add(new Setting(1, R.drawable.block_black, blockContent));
-        mBottomSheetAudio = new BottomSheetAudio(audio, menuLists, new IClickItemBottemSheet() {
+        mBottomSheetAudio = new BottomSheetAudio(audio, menuLists, new IClickItemBottomSheet() {
             @Override
             public void onItemClick(Setting setting) {
                 if (setting.getNameItem().equals(getString(R.string.favorite)))
@@ -166,21 +153,17 @@ public class AllAudioFragment extends Fragment {
                 mBottomSheetAudio.dismiss();
             }
         });
-        mBottomSheetAudio.show(getActivity().getSupportFragmentManager(), mBottomSheetAudio.getTag());
+        mBottomSheetAudio.show(requireActivity().getSupportFragmentManager(), mBottomSheetAudio.getTag());
     }
 
     private void showDialogConfirmBlock(Audio audio) {
-        Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.layout_dialog_blocked);
-        TextView titleDialog = dialog.findViewById(R.id.tv_title_blocked);
-        titleDialog.setText(R.string.confirm_block);
-        Button btnUnBlocked = dialog.findViewById(R.id.btn_dialog_unblocked);
-        btnUnBlocked.setText(R.string.block);
-        Button btnCancel = dialog.findViewById(R.id.btn_bottom_sheet_cancel);
-        ImageView imgAudio = dialog.findViewById(R.id.img_audio_dialog);
-        TextView tvNameAudio = dialog.findViewById(R.id.tv_name_audio);
-        tvNameAudio.setText(audio.getNameAudio());
-        Glide.with(getActivity()).load(audio.getImageResource()).into(imgAudio);
+        LayoutDialogBlockedBinding blockedBinding = LayoutDialogBlockedBinding.inflate(getLayoutInflater());
+        Dialog dialog = new Dialog(requireActivity());
+        dialog.setContentView(blockedBinding.getRoot());
+        blockedBinding.tvTitleDialog.setText(R.string.confirm_block);
+        blockedBinding.btnDialogUnblocked.setText(R.string.block);
+        blockedBinding.tvNameAudio.setText(audio.getNameAudio());
+        Glide.with(requireActivity()).load(audio.getImageResource()).into(blockedBinding.imgAudioDialog);
 
         Window window = dialog.getWindow();
         assert window != null;
@@ -190,18 +173,12 @@ public class AllAudioFragment extends Fragment {
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+        blockedBinding.btnCancel.setOnClickListener(v -> {
+            dialog.dismiss();
         });
-        btnUnBlocked.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                blockItem(audio);
-                dialog.dismiss();
-            }
+        blockedBinding.btnDialogUnblocked.setOnClickListener(v -> {
+            blockItem(audio);
+            dialog.dismiss();
         });
         dialog.show();
     }
@@ -269,29 +246,31 @@ public class AllAudioFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, @NonNull MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_appbar_home, menu);
         this.mMenu = menu;
         setIconMenu();
         super.onCreateOptionsMenu(menu, inflater);
 
         SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
-        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
-        mSearchView.setMaxWidth(Integer.MAX_VALUE);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mAudioAdapter.getFilter().filter(query);
-                return false;
-            }
+        SearchView mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        if (mSearchView != null) {
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
+            mSearchView.setMaxWidth(Integer.MAX_VALUE);
+            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    mAudioAdapter.getFilter().filter(query);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                mAudioAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    mAudioAdapter.getFilter().filter(newText);
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
@@ -319,18 +298,16 @@ public class AllAudioFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     public void onClickChangeTypeDisplay() {
-        if (mRecyclerView != null) {
-            if (mCurrentTypeDisplay == Audio.TYPE_GRID) {
-                setTypeDisplayRecycleView(Audio.TYPE_LIST);
-                mRecyclerView.setLayoutManager(mLinearLayoutManager);
-            } else if (mCurrentTypeDisplay == Audio.TYPE_LIST) {
-                setTypeDisplayRecycleView(Audio.TYPE_GRID);
-                mRecyclerView.setLayoutManager(mGridLayoutManager);
-            }
-            mAudioAdapter.notifyDataSetChanged();
-            setIconMenu();
-            mRecyclerView.scrollToPosition(mCurrentPosition);
+        if (mCurrentTypeDisplay == Audio.TYPE_GRID) {
+            setTypeDisplayRecycleView(Audio.TYPE_LIST);
+            binding.rcvHomeAllSounds.setLayoutManager(mLinearLayoutManager);
+        } else if (mCurrentTypeDisplay == Audio.TYPE_LIST) {
+            setTypeDisplayRecycleView(Audio.TYPE_GRID);
+            binding.rcvHomeAllSounds.setLayoutManager(mGridLayoutManager);
         }
+        mAudioAdapter.notifyDataSetChanged();
+        setIconMenu();
+        binding.rcvHomeAllSounds.scrollToPosition(mCurrentPosition);
     }
 
     public void setIconMenu() {
@@ -345,14 +322,16 @@ public class AllAudioFragment extends Fragment {
     }
 
     private void setCurrentPosition() {
-        RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-        switch (mCurrentTypeDisplay) {
-            case Audio.TYPE_GRID:
-                mCurrentPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
-                break;
-            case Audio.TYPE_LIST:
-                mCurrentPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-                break;
+        RecyclerView.LayoutManager layoutManager = binding.rcvHomeAllSounds.getLayoutManager();
+        if (layoutManager != null) {
+            switch (mCurrentTypeDisplay) {
+                case Audio.TYPE_GRID:
+                    mCurrentPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                    break;
+                case Audio.TYPE_LIST:
+                    mCurrentPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                    break;
+            }
         }
     }
 

@@ -5,21 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.webkit.WebView;
 
 import com.example.whitenoiseapplication.R;
+import com.example.whitenoiseapplication.databinding.ActivityPolicyBinding;
 
 public class PolicyActivity extends AppCompatActivity {
-    private WebView webView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_policy);
-        webView = findViewById(R.id.webview);
-        webView.loadUrl("file:///android_asset/policy.html");
-        webView.getSettings().setAllowContentAccess(true);
-        webView.getSettings().setAllowFileAccess(true);
+        com.example.whitenoiseapplication.databinding.ActivityPolicyBinding binding = ActivityPolicyBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.webView.loadUrl("file:///android_asset/policy.html");
+        binding.webView.getSettings().setAllowContentAccess(true);
+        binding.webView.getSettings().setAllowFileAccess(true);
 
         getSupportActionBar().setTitle(R.string.privacy_policy);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -1,10 +1,7 @@
 package com.example.whitenoiseapplication.fragment;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -16,30 +13,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.BlockedListActivity;
 import com.example.whitenoiseapplication.activity.PolicyActivity;
 import com.example.whitenoiseapplication.adapter.SettingAdapter;
+import com.example.whitenoiseapplication.databinding.SettingFragmentBinding;
 import com.example.whitenoiseapplication.model.Setting;
 import com.example.whitenoiseapplication.util.LocaleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class SettingFragment extends Fragment {
     private Context context;
-    private RecyclerView mRecyclerView;
-    private SettingAdapter mSettingAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.setting_fragment, container, false);
-        mRecyclerView = view.findViewById(R.id.rcv_setting);
-        mSettingAdapter = new SettingAdapter(getContext(),getListSetting(), position -> {
+        SettingFragmentBinding binding = SettingFragmentBinding.inflate(inflater, container, false);
+        SettingAdapter mSettingAdapter = new SettingAdapter(getContext(), getListSetting(), position -> {
             switch (position) {
                 case 0:
                     openBlockedList();
@@ -66,9 +59,9 @@ public class SettingFragment extends Fragment {
             startMainActivity();
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(mSettingAdapter);
-        return view;
+        binding.rcvSetting.setLayoutManager(linearLayoutManager);
+        binding.rcvSetting.setAdapter(mSettingAdapter);
+        return binding.getRoot();
     }
 
     private void startMainActivity(){
@@ -108,7 +101,7 @@ public class SettingFragment extends Fragment {
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.link_app));
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 

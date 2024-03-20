@@ -16,14 +16,10 @@ public class HomePager2Adapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position){
-            case 0:
-                return new AllAudioFragment();
-            case 1:
-                return new FavoriteAudioFragment();
-            default:
-                return new AllAudioFragment();
+        if (position == 1) {
+            return new FavoriteAudioFragment();
         }
+        return new AllAudioFragment();
     }
 
     @Override

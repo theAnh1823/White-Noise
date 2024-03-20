@@ -2,6 +2,6 @@ package com.example.whitenoiseapplication.listener;
 
 import com.example.whitenoiseapplication.model.Setting;
 
-public interface IClickItemBottemSheet {
+public interface IClickItemBottomSheet {
     void onItemClick(Setting setting);
 }

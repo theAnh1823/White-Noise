@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,7 @@ import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.SetAlarmActivity;
 import com.example.whitenoiseapplication.adapter.AlarmAdapter;
 import com.example.whitenoiseapplication.callback.RecyclerViewItemAlarmTouchHelper;
+import com.example.whitenoiseapplication.databinding.AlarmFragmentBinding;
 import com.example.whitenoiseapplication.listener.IClickItemAlarm;
 import com.example.whitenoiseapplication.listener.ItemTouchHelperListener;
 import com.example.whitenoiseapplication.listener.OnSwitchCompatListener;
@@ -31,17 +31,14 @@ import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.util.DateTimeInterval;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
 import com.example.whitenoiseapplication.viewmodel.CreateAlarmViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 public class AlarmFragment extends Fragment implements ItemTouchHelperListener, OnSwitchCompatListener {
+    private AlarmFragmentBinding binding;
     private AlarmsListViewModel alarmsListViewModel;
     private CreateAlarmViewModel createAlarmViewModel;
-    private RecyclerView mRecyclerView;
-    private FloatingActionButton mFloatingButton;
-    private RelativeLayout layout;
     private AlarmAdapter mAlarmAdapter;
     private List<Alarm> mAlarmList;
 
@@ -65,10 +62,7 @@ public class AlarmFragment extends Fragment implements ItemTouchHelperListener, 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.alarm_fragment, container, false);
-        mRecyclerView = view.findViewById(R.id.rcv_alarm);
-        mFloatingButton = view.findViewById(R.id.btn_add_alarm);
-        layout = view.findViewById(R.id.layout_alarm_fragment);
+        binding = AlarmFragmentBinding.inflate(inflater, container, false);
 
         mAlarmAdapter = new AlarmAdapter(getContext(), createAlarmViewModel, alarmsListViewModel, mAlarmList, (IClickItemAlarm) alarm -> {
             Intent intent = new Intent(getActivity(), SetAlarmActivity.class);
@@ -81,34 +75,34 @@ public class AlarmFragment extends Fragment implements ItemTouchHelperListener, 
         }, this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(mAlarmAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
+        binding.recyclerView.setAdapter(mAlarmAdapter);
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    mFloatingButton.show();
+                    binding.btnAddAlarm.show();
                 }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0 || dy < 0 && mFloatingButton.isShown()) {
-                    mFloatingButton.hide();
+                if (dy > 0 || dy < 0 && binding.btnAddAlarm.isShown()) {
+                    binding.btnAddAlarm.hide();
                 }
             }
         });
-        mFloatingButton.setOnClickListener(v -> {
+        binding.btnAddAlarm.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SetAlarmActivity.class);
             intent.putExtra("title_alarm_activity", getString(R.string.add_alarm));
             startActivity(intent);
         });
 
         ItemTouchHelper.SimpleCallback simpleCallback = new RecyclerViewItemAlarmTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(simpleCallback).attachToRecyclerView(mRecyclerView);
-        return view;
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(binding.recyclerView);
+        return binding.getRoot();
     }
 
     @SuppressLint("ResourceAsColor")
@@ -119,13 +113,13 @@ public class AlarmFragment extends Fragment implements ItemTouchHelperListener, 
             int deletedIndex = viewHolder.getBindingAdapterPosition();
             mAlarmAdapter.removeItem(alarm, deletedIndex);
 
-            Snackbar snackbar = Snackbar.make(layout, R.string.message_delete_alarm, Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.navy));
+            Snackbar snackbar = Snackbar.make(binding.getRoot(), R.string.message_delete_alarm, Snackbar.LENGTH_LONG);
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.navy));
             snackbar.setActionTextColor(Color.WHITE);
             snackbar.setAction(R.string.undo, v -> {
                 mAlarmAdapter.undoItem(alarm, deletedIndex);
                 if (deletedIndex == 0 || deletedIndex == mAlarmList.size() - 1)
-                    mRecyclerView.scrollToPosition(deletedIndex);
+                    binding.recyclerView.scrollToPosition(deletedIndex);
             });
             snackbar.show();
         }
@@ -134,12 +128,12 @@ public class AlarmFragment extends Fragment implements ItemTouchHelperListener, 
     @Override
     public void onClickSwitchCompat(Alarm alarm) {
         if (alarm.isAlarmEnabled()) {
-            alarm.cancelAlarm(getContext());
+            alarm.cancelAlarm(requireContext());
             alarmsListViewModel.update(alarm);
         } else {
-            alarm.schedule(getContext());
+            alarm.schedule(requireContext());
             alarmsListViewModel.update(alarm);
-            Toast.makeText(getContext(), DateTimeInterval.getDateTimeInterval(alarm, getContext()), Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), DateTimeInterval.getDateTimeInterval(alarm, requireContext()), Toast.LENGTH_LONG).show();
         }
     }
 }

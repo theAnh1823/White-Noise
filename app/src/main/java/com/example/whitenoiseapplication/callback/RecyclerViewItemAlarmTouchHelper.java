@@ -12,7 +12,7 @@ import com.example.whitenoiseapplication.adapter.AlarmAdapter;
 import com.example.whitenoiseapplication.listener.ItemTouchHelperListener;
 
 public class RecyclerViewItemAlarmTouchHelper extends ItemTouchHelper.SimpleCallback {
-    private ItemTouchHelperListener listener;
+    private final ItemTouchHelperListener listener;
     public RecyclerViewItemAlarmTouchHelper(int dragDirs, int swipeDirs, ItemTouchHelperListener listener) {
         super(dragDirs, swipeDirs);
         this.listener = listener;
@@ -33,26 +33,26 @@ public class RecyclerViewItemAlarmTouchHelper extends ItemTouchHelper.SimpleCall
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         if (viewHolder != null) {
-            View foregroundView = ((AlarmAdapter.AlarmViewHolder)viewHolder).layoutItemAlarm;
+            View foregroundView = ((AlarmAdapter.AlarmViewHolder)viewHolder).itemAlarmBinding.layoutItemAlarm;
             getDefaultUIUtil().onSelected(foregroundView);
         }
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View foregroundView = ((AlarmAdapter.AlarmViewHolder) viewHolder).layoutItemAlarm;
+        View foregroundView = ((AlarmAdapter.AlarmViewHolder) viewHolder).itemAlarmBinding.layoutItemAlarm;
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
     }
 
     @Override
     public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View foregroundView = ((AlarmAdapter.AlarmViewHolder) viewHolder).layoutItemAlarm;
+        View foregroundView = ((AlarmAdapter.AlarmViewHolder) viewHolder).itemAlarmBinding.layoutItemAlarm;
         getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
     }
 
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        View foregroundView = ((AlarmAdapter.AlarmViewHolder) viewHolder).layoutItemAlarm;
+        View foregroundView = ((AlarmAdapter.AlarmViewHolder) viewHolder).itemAlarmBinding.layoutItemAlarm;
         getDefaultUIUtil().clearView(foregroundView);
     }
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.adapter.BlockedListAdapter;
+import com.example.whitenoiseapplication.databinding.ActivityBlockedListBinding;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.model.Audio;
 import com.google.firebase.database.DataSnapshot;
@@ -27,19 +28,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockedListActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private BlockedListAdapter blockedListAdapter;
     private List<Audio> mListBlocked;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blocked_list);
+        com.example.whitenoiseapplication.databinding.ActivityBlockedListBinding binding = ActivityBlockedListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         getSupportActionBar().setTitle(R.string.blocked_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = findViewById(R.id.rcv_blocked_list);
         mListBlocked = getBlockedList();
         blockedListAdapter = new BlockedListAdapter(this, mListBlocked, new IClickItemAudioListener() {
             @Override
@@ -58,8 +58,8 @@ public class BlockedListActivity extends AppCompatActivity {
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(blockedListAdapter);
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
+        binding.recyclerView.setAdapter(blockedListAdapter);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -77,6 +77,7 @@ public class BlockedListActivity extends AppCompatActivity {
 
         List<Audio> list = new ArrayList<>();
         myRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (mListBlocked != null) {
@@ -84,7 +85,6 @@ public class BlockedListActivity extends AppCompatActivity {
                 }
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Audio audio = postSnapshot.getValue(Audio.class);
-//                    Log.e("TAG", audio.toString());
                     if (audio != null && audio.isBlocked()) {
                         list.add(audio);
                     }

@@ -17,7 +17,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/home_viewpager2"
+        android:id="@+id/home_view_pager2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -35,7 +35,7 @@
             android:gravity="center"
             android:layout_gravity="center"/>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv_result_sleep_calculator"
+            android:id="@+id/rcv_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <androidx.appcompat.widget.AppCompatButton

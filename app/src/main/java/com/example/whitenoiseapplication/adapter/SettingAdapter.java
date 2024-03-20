@@ -8,15 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.whitenoiseapplication.R;
+import com.example.whitenoiseapplication.databinding.ItemSettingBinding;
+import com.example.whitenoiseapplication.databinding.ItemSettingLanguageBinding;
 import com.example.whitenoiseapplication.listener.IClickChangeLanguage;
 import com.example.whitenoiseapplication.listener.IClickItemByPosition;
 import com.example.whitenoiseapplication.model.Setting;
@@ -24,10 +21,10 @@ import com.example.whitenoiseapplication.model.Setting;
 import java.util.List;
 
 public class SettingAdapter extends RecyclerView.Adapter {
-    private Context context;
-    private List<Setting> mListSetting;
-    private IClickItemByPosition iClickItemByPosition;
-    private IClickChangeLanguage iClickChangeLanguage;
+    private final Context context;
+    private final List<Setting> mListSetting;
+    private final IClickItemByPosition iClickItemByPosition;
+    private final IClickChangeLanguage iClickChangeLanguage;
 
     public SettingAdapter(Context context, List<Setting> list, IClickItemByPosition iClickItemByPosition, IClickChangeLanguage iClickChangeLanguage) {
         this.context = context;
@@ -53,14 +50,13 @@ public class SettingAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case 1:
-                View layoutSetting = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting, parent, false);
-                return new SettingViewHolder(layoutSetting);
+                ItemSettingBinding itemSettingBinding = ItemSettingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new SettingViewHolder(itemSettingBinding);
             case 2:
-                View layoutLanguage = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting_language, parent, false);
-                return new ChangeLanguageHolder(layoutLanguage);
-            default:
-                return null;
+                ItemSettingLanguageBinding itemSettingLanguageBinding = ItemSettingLanguageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ChangeLanguageHolder(itemSettingLanguageBinding);
         }
+        return null;
     }
 
     @Override
@@ -70,9 +66,10 @@ public class SettingAdapter extends RecyclerView.Adapter {
             return;
         }
         if (holder instanceof SettingViewHolder) {
-            ((SettingViewHolder) holder).tvSetting.setText(setting.getNameItem());
-            ((SettingViewHolder) holder).imageView.setImageResource(setting.getImageResource());
-            ((SettingViewHolder) holder).layoutSetting.setOnClickListener(new View.OnClickListener() {
+            ((SettingViewHolder) holder).binding.tvNameSetting.setText(setting.getNameItem());
+            ((SettingViewHolder) holder).binding.imgItemSetting.setVisibility(View.VISIBLE);
+            ((SettingViewHolder) holder).binding.imgItemSetting.setImageResource(setting.getImageResource());
+            ((SettingViewHolder) holder).binding.layoutItemSetting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int adapterPosition = holder.getBindingAdapterPosition();
@@ -83,8 +80,8 @@ public class SettingAdapter extends RecyclerView.Adapter {
             });
         } else if (holder instanceof ChangeLanguageHolder) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("pref_switch_language", MODE_PRIVATE);
-            ((ChangeLanguageHolder) holder).switchLanguage.setChecked(sharedPreferences.getBoolean("value", false));
-            ((ChangeLanguageHolder) holder).switchLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            ((ChangeLanguageHolder) holder).binding.switchChangeLanguage.setChecked(sharedPreferences.getBoolean("value", false));
+            ((ChangeLanguageHolder) holder).binding.switchChangeLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     iClickChangeLanguage.clickChangeLanguage(isChecked);
@@ -92,7 +89,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                     SharedPreferences.Editor editor = context.getSharedPreferences("pref_switch_language", MODE_PRIVATE).edit();
                     editor.putBoolean("value", isChecked);
                     editor.apply();
-                    ((ChangeLanguageHolder) holder).switchLanguage.setChecked(isChecked);
+                    ((ChangeLanguageHolder) holder).binding.switchChangeLanguage.setChecked(isChecked);
                 }
             });
         }
@@ -108,27 +105,20 @@ public class SettingAdapter extends RecyclerView.Adapter {
     }
 
     public static class SettingViewHolder extends RecyclerView.ViewHolder {
-        private ConstraintLayout layoutSetting;
-        private ImageView imageView;
-        private TextView tvSetting;
+        private final ItemSettingBinding binding;
 
-        public SettingViewHolder(@NonNull View itemView) {
-            super(itemView);
-            layoutSetting = itemView.findViewById(R.id.layout_item_setting);
-            imageView = itemView.findViewById(R.id.img_item_setting);
-            tvSetting = itemView.findViewById(R.id.tv_name_setting);
-            imageView.setVisibility(View.VISIBLE);
+        public SettingViewHolder(@NonNull ItemSettingBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public class ChangeLanguageHolder extends RecyclerView.ViewHolder {
-        private TextView tvLanguage;
-        private SwitchCompat switchLanguage;
+        private final ItemSettingLanguageBinding binding;
 
-        public ChangeLanguageHolder(@NonNull View itemView) {
-            super(itemView);
-            tvLanguage = itemView.findViewById(R.id.content_item_language);
-            switchLanguage = itemView.findViewById(R.id.switch_change_language);
+        public ChangeLanguageHolder(@NonNull ItemSettingLanguageBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

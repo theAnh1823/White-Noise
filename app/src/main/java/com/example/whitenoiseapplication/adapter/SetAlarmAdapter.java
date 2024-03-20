@@ -4,48 +4,42 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.whitenoiseapplication.R;
-import com.example.whitenoiseapplication.listener.IClickItemBottemSheet;
-import com.example.whitenoiseapplication.listener.IClickItemByPosition;
+import com.example.whitenoiseapplication.databinding.ItemSetAlarmBinding;
+import com.example.whitenoiseapplication.listener.IClickItemBottomSheet;
 import com.example.whitenoiseapplication.model.Setting;
 
 import java.util.List;
 
 public class SetAlarmAdapter extends RecyclerView.Adapter<SetAlarmAdapter.SetAlarmHolder>{
-    private Context context;
-    private List<Setting> listSetAlarm;
-    private IClickItemBottemSheet iClickItemBottemSheet;
+    private final Context context;
+    private final List<Setting> listSetAlarm;
+    private final IClickItemBottomSheet iClickItemBottomSheet;
 
-    public SetAlarmAdapter(Context context, List<Setting> listSetAlarm, IClickItemBottemSheet iClickItemBottemSheet) {
+    public SetAlarmAdapter(Context context, List<Setting> listSetAlarm, IClickItemBottomSheet iClickItemBottomSheet) {
         this.context = context;
         this.listSetAlarm = listSetAlarm;
-        this.iClickItemBottemSheet = iClickItemBottemSheet;
+        this.iClickItemBottomSheet = iClickItemBottomSheet;
     }
 
     @NonNull
     @Override
     public SetAlarmHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_set_alarm, parent, false);
-        return new SetAlarmHolder(view);
+        ItemSetAlarmBinding binding = ItemSetAlarmBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new SetAlarmHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SetAlarmHolder holder, int position) {
         Setting setAlarm = listSetAlarm.get(position);
         if (setAlarm != null){
-            holder.tvTitleItemSetAlarm.setText(setAlarm.getNameItem());
-            holder.tvContentItemSetAlarm.setText(setAlarm.getContentItem());
-            holder.layoutItemSetAlarm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    iClickItemBottemSheet.onItemClick(setAlarm);
-                }
+            holder.binding.tvTitleItemSetAlarm.setText(setAlarm.getNameItem());
+            holder.binding.tvContentItemSetAlarm.setText(setAlarm.getContentItem());
+            holder.binding.layoutItemSetAlarm.setOnClickListener(v -> {
+                iClickItemBottomSheet.onItemClick(setAlarm);
             });
         }
     }
@@ -59,14 +53,11 @@ public class SetAlarmAdapter extends RecyclerView.Adapter<SetAlarmAdapter.SetAla
     }
 
     public class SetAlarmHolder extends RecyclerView.ViewHolder{
-        private ConstraintLayout layoutItemSetAlarm;
-        private TextView tvTitleItemSetAlarm, tvContentItemSetAlarm;
+        private final ItemSetAlarmBinding binding;
 
-        public SetAlarmHolder(@NonNull View itemView) {
-            super(itemView);
-            layoutItemSetAlarm = itemView.findViewById(R.id.layout_item_set_alarm);
-            tvTitleItemSetAlarm = itemView.findViewById(R.id.tv_title_item_set_alarm);
-            tvContentItemSetAlarm = itemView.findViewById(R.id.tv_content_item_set_alarm);
+        public SetAlarmHolder(@NonNull ItemSetAlarmBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

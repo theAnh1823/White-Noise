@@ -44,7 +44,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_activity_audio"
+            android:id="@+id/img_timer_circle"
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_centerInParent="true"

@@ -100,6 +100,6 @@ public class BottomSheetCustomAlarmRepeat extends BottomSheetDialogFragment {
         checkBoxSaturday = view.findViewById(R.id.checkbox_saturday);
         checkBoxSunday = view.findViewById(R.id.checkbox_sunday);
         btnSave = view.findViewById(R.id.btn_save_repeat_setting);
-        btnCancel = view.findViewById(R.id.btn_bottom_sheet_cancel);
+        btnCancel = view.findViewById(R.id.btn_cancel);
     }
 }

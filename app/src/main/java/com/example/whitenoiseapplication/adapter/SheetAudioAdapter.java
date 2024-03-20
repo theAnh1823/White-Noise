@@ -1,48 +1,41 @@
 package com.example.whitenoiseapplication.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.whitenoiseapplication.R;
-import com.example.whitenoiseapplication.listener.IClickItemBottemSheet;
+import com.example.whitenoiseapplication.databinding.ItemBottomSheetBinding;
+import com.example.whitenoiseapplication.listener.IClickItemBottomSheet;
 import com.example.whitenoiseapplication.model.Setting;
 
 import java.util.List;
 
-public class SheetAudioAdapter extends RecyclerView.Adapter<SheetAudioAdapter.BottemSheetHolder>{
-    private List<Setting> mList;
-    private IClickItemBottemSheet iClickItemBottemSheet;
+public class SheetAudioAdapter extends RecyclerView.Adapter<SheetAudioAdapter.BottomSheetHolder>{
+    private final List<Setting> mList;
+    private final IClickItemBottomSheet iClickItemBottomSheet;
 
-    public SheetAudioAdapter(List<Setting> mList, IClickItemBottemSheet iClickItemBottemSheet) {
+    public SheetAudioAdapter(List<Setting> mList, IClickItemBottomSheet iClickItemBottomSheet) {
         this.mList = mList;
-        this.iClickItemBottemSheet = iClickItemBottemSheet;
+        this.iClickItemBottomSheet = iClickItemBottomSheet;
     }
 
     @NonNull
     @Override
-    public BottemSheetHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bottom_sheet,parent,false);
-        return new BottemSheetHolder(view);
+    public BottomSheetHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemBottomSheetBinding binding = ItemBottomSheetBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new BottomSheetHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BottemSheetHolder holder, int position) {
-        Setting itemBottemSheet = mList.get(position);
-        if (itemBottemSheet != null){
-            holder.imageView.setImageResource(itemBottemSheet.getImageResource());
-            holder.tvBottemSheet.setText(itemBottemSheet.getNameItem());
-            holder.layoutBottemSheet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                        iClickItemBottemSheet.onItemClick(itemBottemSheet);
-                }
+    public void onBindViewHolder(@NonNull BottomSheetHolder holder, int position) {
+        Setting itemBottomSheet = mList.get(position);
+        if (itemBottomSheet != null){
+            holder.binding.imgItemSheet.setImageResource(itemBottomSheet.getImageResource());
+            holder.binding.tvNameSheet.setText(itemBottomSheet.getNameItem());
+            holder.binding.itemLayoutSheet.setOnClickListener(v -> {
+                iClickItemBottomSheet.onItemClick(itemBottomSheet);
             });
         }
     }
@@ -55,15 +48,11 @@ public class SheetAudioAdapter extends RecyclerView.Adapter<SheetAudioAdapter.Bo
         return 0;
     }
 
-    public static class BottemSheetHolder extends RecyclerView.ViewHolder{
-        private ConstraintLayout layoutBottemSheet;
-        private ImageView imageView;
-        private TextView tvBottemSheet;
-        public BottemSheetHolder(@NonNull View itemView) {
-            super(itemView);
-            layoutBottemSheet = itemView.findViewById(R.id.item_layout_sheet);
-            imageView = itemView.findViewById(R.id.img_item_sheet);
-            tvBottemSheet = itemView.findViewById(R.id.tv_name_sheet);
+    public static class BottomSheetHolder extends RecyclerView.ViewHolder{
+        private final ItemBottomSheetBinding binding;
+        public BottomSheetHolder(@NonNull ItemBottomSheetBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_alarm"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -15,6 +15,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
         android:src="@drawable/add"
-        android:backgroundTint="@color/pale_turquoise"/>
+        android:backgroundTint="@color/pale_turquoise"
+        android:importantForAccessibility="no" />
 
 </RelativeLayout>

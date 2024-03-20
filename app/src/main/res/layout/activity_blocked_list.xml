@@ -11,7 +11,7 @@
         android:text="@string/content_blocked_list"
         android:textSize="13sp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/rcv_blocked_list"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view"
         android:paddingTop="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -20,7 +20,7 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_blocked_list"
+        android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"

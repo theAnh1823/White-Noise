@@ -1,25 +1,23 @@
 package com.example.whitenoiseapplication.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.adapter.SetAlarmAdapter;
+import com.example.whitenoiseapplication.databinding.ActivitySetAlarmBinding;
 import com.example.whitenoiseapplication.fragment.BottomSheetAddLabelAlarm;
 import com.example.whitenoiseapplication.fragment.BottomSheetCustomAlarmRepeat;
 import com.example.whitenoiseapplication.fragment.BottomSheetSetAlarm;
-import com.example.whitenoiseapplication.listener.IClickItemBottemSheet;
+import com.example.whitenoiseapplication.listener.IClickItemBottomSheet;
 import com.example.whitenoiseapplication.listener.IClickItemByPosition;
 import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.model.AlarmSetting;
@@ -37,6 +35,7 @@ import java.util.List;
 import java.util.Random;
 
 public class SetAlarmActivity extends AppCompatActivity {
+    private ActivitySetAlarmBinding binding;
     private Context context;
     private boolean adjustExistingAlarm;
     private Alarm alarmCreating;
@@ -44,10 +43,6 @@ public class SetAlarmActivity extends AppCompatActivity {
     private CreateAlarmViewModel createAlarmViewModel;
     private AlarmsListViewModel alarmsListViewModel;
     private Calendar calendar;
-    private ImageView btnClose, btnSaveAlarm;
-    private AppCompatTextView tvHeader, tvTitle;
-    private TimePicker timePicker;
-    private RecyclerView recyclerView;
     private SetAlarmAdapter setAlarmAdapter;
     private BottomSheetSetAlarm bottomSheetSetAlarm;
     private BottomSheetAddLabelAlarm bottomSheetAddLabelAlarm;
@@ -59,9 +54,9 @@ public class SetAlarmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_alarm);
+        binding = ActivitySetAlarmBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         getSupportActionBar().hide();
-        initComponents();
 
         SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
         boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
@@ -71,6 +66,7 @@ public class SetAlarmActivity extends AppCompatActivity {
             context = LocaleHelper.setLocale(this, "en");
         }
 
+        binding.tvTitleSetAlarm.setText(getIntent().getStringExtra("title_alarm_activity"));
         calendar = Calendar.getInstance();
         alarmCreating = new Alarm();
         adjustExistingAlarm = getIntent().getBooleanExtra("adjust_alarm_setting", false);
@@ -83,7 +79,7 @@ public class SetAlarmActivity extends AppCompatActivity {
             }
         } else {
             setDefaultAlarm();
-            tvTitle.setText(getTitleTimeDuration());
+            binding.tvTimeLeftFromNow.setText(getTitleTimeDuration());
         }
         listAlarmSound = getListAlarmSound();
         listRepeatSelection = getListRepeatSelection();
@@ -91,7 +87,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         alarmsListViewModel = new ViewModelProvider(this).get(AlarmsListViewModel.class);
 
         List<Setting> listSettingAlarm = adjustExistingAlarm ? getListSettingExistAlarm(alarmCreating) : getListSettingDefaultAlarm();
-        setAlarmAdapter = new SetAlarmAdapter(this, listSettingAlarm, new IClickItemBottemSheet() {
+        setAlarmAdapter = new SetAlarmAdapter(this, listSettingAlarm, new IClickItemBottomSheet() {
             @Override
             public void onItemClick(Setting setting) {
                 if (setting.getNameItem().equals(getString(R.string.alarm_sound))) {
@@ -105,14 +101,14 @@ public class SetAlarmActivity extends AppCompatActivity {
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(setAlarmAdapter);
+        binding.rcvSetAlarm.setLayoutManager(layoutManager);
+        binding.rcvSetAlarm.setAdapter(setAlarmAdapter);
 
-        btnClose.setOnClickListener(v -> {
+        binding.btnClose.setOnClickListener(v -> {
             getOnBackPressedDispatcher().onBackPressed();
         });
 
-        btnSaveAlarm.setOnClickListener(v -> {
+        binding.btnSave.setOnClickListener(v -> {
             alarmCreating.setAlarmEnabled(true);
             if (adjustExistingAlarm) {
                 alarmsListViewModel.update(alarmCreating);
@@ -124,13 +120,13 @@ public class SetAlarmActivity extends AppCompatActivity {
             getOnBackPressedDispatcher().onBackPressed();
         });
 
-        timePicker.setIs24HourView(true);
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+        binding.timePicker.setIs24HourView(true);
+        binding.timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 alarmCreating.setAlarmHour(hourOfDay);
                 alarmCreating.setAlarmMinute(minute);
-                tvTitle.setText(getTitleTimeDuration());
+                binding.tvTimeLeftFromNow.setText(getTitleTimeDuration());
             }
         });
     }
@@ -161,17 +157,17 @@ public class SetAlarmActivity extends AppCompatActivity {
                     openSheetCustomRepeat(setting);
                 } else {
                     if (position == listRepeatSelection.size() - 2) {
-                        setWeekdaysAlarm(true);
+                        setWeekdaysAlarm();
                         setWeekendAlarm(false);
                     }
                     if (position > 0){
-                        setWeekdaysAlarm(true);
+                        setWeekdaysAlarm();
                         setWeekendAlarm(true);
                         alarmCreating.setRecurring(true);
                     }
                     setting.setContentItem(getString(listRepeatSelection.get(position).getIdName()));
                     alarmCreating.setRepeatModeId(listRepeatSelection.get(position).getIdName());
-                    tvTitle.setText(getTitleTimeDuration());
+                    binding.tvTimeLeftFromNow.setText(getTitleTimeDuration());
                     setAlarmAdapter.notifyDataSetChanged();
                 }
                 bottomSheetSetAlarm.dismiss();
@@ -191,7 +187,7 @@ public class SetAlarmActivity extends AppCompatActivity {
             alarmCreating.setRepeatModeId(R.string.custom);
             alarmCreating.setRecurring(true);
             alarmCreating.setRepeatForDaysOfWeek(true);
-            tvTitle.setText(getTitleTimeDuration());
+            binding.tvTimeLeftFromNow.setText(getTitleTimeDuration());
             setAlarmAdapter.notifyDataSetChanged();
             sheetCustomAlarmRepeat.dismiss();
         });
@@ -268,20 +264,10 @@ public class SetAlarmActivity extends AppCompatActivity {
         }
     }
 
-    private void initComponents() {
-        btnClose = findViewById(R.id.btn_close_set_alarm);
-        btnSaveAlarm = findViewById(R.id.btn_save_set_alarm);
-        tvHeader = findViewById(R.id.tv_header_set_alarm);
-        tvHeader.setText(getIntent().getStringExtra("title_alarm_activity"));
-        tvTitle = findViewById(R.id.tv_title_set_alarm);
-        timePicker = findViewById(R.id.time_picker_set_alarm);
-        recyclerView = findViewById(R.id.rcv_set_alarm);
-    }
-
     private void updateUIWithAlarmSetting(Alarm alarm) {
-        TimePickerUtil.setHourTimePicker(timePicker, alarm.getAlarmHour());
-        TimePickerUtil.setMinuteTimePicker(timePicker, alarm.getAlarmMinute());
-        tvTitle.setText(getTitleTimeDuration());
+        TimePickerUtil.setHourTimePicker(binding.timePicker, alarm.getAlarmHour());
+        TimePickerUtil.setMinuteTimePicker(binding.timePicker, alarm.getAlarmMinute());
+        binding.tvTimeLeftFromNow.setText(getTitleTimeDuration());
     }
 
     private void setDefaultAlarm() {
@@ -306,12 +292,12 @@ public class SetAlarmActivity extends AppCompatActivity {
         alarmCreating.setSunday(listSelectionDayOfWeek.get(6));
     }
 
-    private void setWeekdaysAlarm(boolean isEnabled){
-        alarmCreating.setMonday(isEnabled);
-        alarmCreating.setTuesday(isEnabled);
-        alarmCreating.setWednesday(isEnabled);
-        alarmCreating.setThursday(isEnabled);
-        alarmCreating.setFriday(isEnabled);
+    private void setWeekdaysAlarm(){
+        alarmCreating.setMonday(true);
+        alarmCreating.setTuesday(true);
+        alarmCreating.setWednesday(true);
+        alarmCreating.setThursday(true);
+        alarmCreating.setFriday(true);
     }
 
     private void setWeekendAlarm(boolean isEnabled){

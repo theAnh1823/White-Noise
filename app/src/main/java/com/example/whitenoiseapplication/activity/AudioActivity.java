@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.TimePickerDialog;
@@ -16,30 +15,23 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.whitenoiseapplication.R;
+import com.example.whitenoiseapplication.databinding.ActivityAudioBinding;
+import com.example.whitenoiseapplication.databinding.ActivityMainBinding;
 import com.example.whitenoiseapplication.model.Audio;
 import com.example.whitenoiseapplication.model.CountDownManager;
 import com.example.whitenoiseapplication.service.AudioService;
-import com.skyfishjy.library.RippleBackground;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class AudioActivity extends AppCompatActivity {
-    private ConstraintLayout layout;
-    private ImageView btnCollapse, setTimer;
-    private TextView tvTitleAudio;
-    public TextView tvCountdown;
+    private ActivityAudioBinding binding;
     private CountDownManager countDownManager;
-    private RippleBackground rippleBackground;
-    private ImageButton btnPlayOrPause;
     private Audio mAudio;
     private boolean isPlaying;
     private int actionAudio;
@@ -61,25 +53,26 @@ public class AudioActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio);
+        binding = ActivityAudioBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         getSupportActionBar().hide();
         //set navigation bar and status bar to transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         getExtrasFromMainActivity();
-        initView();
-        countDownManager = CountDownManager.initInstance(MainActivity.tvCountDown, () -> {
+        handleLayoutAudio(actionAudio);
+        countDownManager = CountDownManager.initInstance(ActivityMainBinding.inflate(getLayoutInflater()).tvCountdownTimer, () -> {
             sendActionToService(AudioService.ACTION_CLOSE);
-            tvCountdown.setVisibility(View.GONE);
+            binding.tvCountdownTimer.setVisibility(View.GONE);
         });
-        countDownManager.setTvAudioActivity(this.tvCountdown);
+        countDownManager.setTvAudioActivity(binding.tvCountdownTimer);
 //        setCountDownTimer();
 
         Glide.with(this).load(mAudio.getImageResource()).centerCrop().transform(new BlurTransformation(25, 5)).into(new CustomTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                layout.setBackground(resource);
+                binding.layoutActivityAudio.setBackground(resource);
             }
 
             @Override
@@ -90,21 +83,21 @@ public class AudioActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("send_data_to_activity"));
 
-        btnCollapse.setOnClickListener(v -> {
+        binding.btnBackActivityAudio.setOnClickListener(v -> {
             getOnBackPressedDispatcher().onBackPressed();
         });
 
-        setTimer.setOnClickListener(v -> openDialogSetTimer());
+        binding.imgTimerCircle.setOnClickListener(v -> openDialogSetTimer());
 
-        btnPlayOrPause.setOnClickListener(v -> {
+        binding.btnPlayOrPause.setOnClickListener(v -> {
             if (isPlaying) {
                 pauseCountDownTimer();
                 sendActionToService(AudioService.ACTION_PAUSE);
-                rippleBackground.stopRippleAnimation();
+                binding.rippleBackground.stopRippleAnimation();
             } else {
                 resumeCountDownTimer();
                 sendActionToService(AudioService.ACTION_RESUME);
-                rippleBackground.startRippleAnimation();
+                binding.rippleBackground.startRippleAnimation();
             }
         });
     }
@@ -116,11 +109,11 @@ public class AudioActivity extends AppCompatActivity {
     }
 
     private void setCountDownTimer() {
-        tvCountdown.setText(countDownManager.millisToTimeFormat(countDownManager.getTimeRemaining()));
+        binding.tvCountdownTimer.setText(countDownManager.millisToTimeFormat(countDownManager.getTimeRemaining()));
         if (countDownManager.isTimerRunning() && countDownManager.getTimeRemaining() > 0) {
             countDownManager.startTimer();
         } else if (countDownManager.getTimeRemaining() == 0) {
-            tvCountdown.setVisibility(View.GONE);
+            binding.tvCountdownTimer.setVisibility(View.GONE);
         }
     }
 
@@ -149,7 +142,7 @@ public class AudioActivity extends AppCompatActivity {
                             openTimePickerDialog();
                             break;
                         case 5:
-                            tvCountdown.setVisibility(View.GONE);
+                            binding.tvCountdownTimer.setVisibility(View.GONE);
                             countDownManager.resetTimer();
                             break;
                     }
@@ -160,7 +153,7 @@ public class AudioActivity extends AppCompatActivity {
                         countDownManager.resetTimer();
                         startCountDownTimer(millisInFuture[checkedItem[0]]);
                         sendActionToService(AudioService.ACTION_RESUME);
-                        rippleBackground.startRippleAnimation();
+                        binding.rippleBackground.startRippleAnimation();
                     }
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
@@ -173,7 +166,7 @@ public class AudioActivity extends AppCompatActivity {
 
     private void startCountDownTimer(long l) {
         countDownManager.setTimeRemaining(l);
-        tvCountdown.setVisibility(View.VISIBLE);
+        binding.tvCountdownTimer.setVisibility(View.VISIBLE);
         countDownManager.startTimer();
     }
 
@@ -215,28 +208,16 @@ public class AudioActivity extends AppCompatActivity {
         }
     }
 
-    private void initView() {
-        layout = findViewById(R.id.layout_activity_audio);
-        btnCollapse = findViewById(R.id.btn_back_activity_audio);
-        setTimer = findViewById(R.id.img_activity_audio);
-        tvTitleAudio = findViewById(R.id.tv_name_activity_audio);
-        tvTitleAudio.setText(mAudio.getNameAudio());
-        tvCountdown = findViewById(R.id.tv_countdown_timer);
-        rippleBackground = findViewById(R.id.ripple_background);
-        btnPlayOrPause = findViewById(R.id.btn_play_or_pause);
-        handleLayoutAudio(actionAudio);
-    }
-
     private void handleLayoutAudio(int actionAudio) {
         switch (actionAudio) {
             case AudioService.ACTION_START:
             case AudioService.ACTION_RESUME:
-                btnPlayOrPause.setImageResource(R.drawable.pause_40dp);
-                rippleBackground.startRippleAnimation();
+                binding.btnPlayOrPause.setImageResource(R.drawable.pause_40dp);
+                binding.rippleBackground.startRippleAnimation();
                 break;
             case AudioService.ACTION_PAUSE:
-                btnPlayOrPause.setImageResource(R.drawable.play_40dp);
-                rippleBackground.stopRippleAnimation();
+                binding.btnPlayOrPause.setImageResource(R.drawable.play_40dp);
+                binding.rippleBackground.stopRippleAnimation();
                 break;
             default:
                 getOnBackPressedDispatcher().onBackPressed();

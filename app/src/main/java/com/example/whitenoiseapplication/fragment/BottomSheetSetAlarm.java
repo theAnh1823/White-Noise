@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -65,7 +64,7 @@ public class BottomSheetSetAlarm extends BottomSheetDialogFragment {
             buttonLayout.setVisibility(View.GONE);
         }
         btnSave = view.findViewById(R.id.btn_save_alarm_setting);
-        btnCancel = view.findViewById(R.id.btn_bottom_sheet_cancel);
+        btnCancel = view.findViewById(R.id.btn_cancel);
         btnSave.setOnClickListener(v -> {
             if (saveListener != null) {
                 saveListener.saveAlarmSetting();

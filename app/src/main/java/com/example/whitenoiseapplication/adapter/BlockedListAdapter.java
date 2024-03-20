@@ -4,16 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.whitenoiseapplication.R;
+import com.example.whitenoiseapplication.databinding.ItemBlockedListBinding;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.model.Audio;
 
@@ -33,17 +30,17 @@ public class BlockedListAdapter extends RecyclerView.Adapter<BlockedListAdapter.
     @NonNull
     @Override
     public BlockedHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_blocked_list, parent, false);
-        return new BlockedHolder(view);
+        ItemBlockedListBinding binding = ItemBlockedListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new BlockedHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BlockedHolder holder, int position) {
         Audio audio = mList.get(position);
         if (audio != null){
-            holder.tvItem.setText(audio.getNameAudio());
-            Glide.with(context).load(audio.getImageResource()).into(holder.imageView);
-            holder.btnUnBlocked.setOnClickListener(new View.OnClickListener() {
+            holder.binding.tvNameAudio.setText(audio.getNameAudio());
+            Glide.with(context).load(audio.getImageResource()).into(holder.binding.imgItemBlocked);
+            holder.binding.btnUnblocked.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onClickItemAudio(audio);
@@ -61,14 +58,10 @@ public class BlockedListAdapter extends RecyclerView.Adapter<BlockedListAdapter.
     }
 
     public static class BlockedHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
-        private Button btnUnBlocked;
-        private TextView tvItem;
-        public BlockedHolder(@NonNull View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.img_item_blocked);
-            btnUnBlocked = itemView.findViewById(R.id.btn_unblocked);
-            tvItem = itemView.findViewById(R.id.tv_name_audio);
+        private final ItemBlockedListBinding binding;
+        public BlockedHolder(@NonNull ItemBlockedListBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

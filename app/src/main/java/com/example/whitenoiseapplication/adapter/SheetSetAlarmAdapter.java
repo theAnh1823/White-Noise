@@ -14,15 +14,16 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whitenoiseapplication.R;
+import com.example.whitenoiseapplication.databinding.ItemSettingBinding;
 import com.example.whitenoiseapplication.listener.IClickItemByPosition;
 import com.example.whitenoiseapplication.model.AlarmSetting;
 
 import java.util.List;
 
 public class SheetSetAlarmAdapter extends RecyclerView.Adapter<SheetSetAlarmAdapter.SetAlarmHolder> {
-    private Context context;
-    private List<AlarmSetting> mList;
-    private IClickItemByPosition clickItemByPosition;
+    private final Context context;
+    private final List<AlarmSetting> mList;
+    private final IClickItemByPosition clickItemByPosition;
 
     public SheetSetAlarmAdapter(Context context, List<AlarmSetting> mList, IClickItemByPosition clickItemByPosition) {
         this.context = context;
@@ -33,27 +34,27 @@ public class SheetSetAlarmAdapter extends RecyclerView.Adapter<SheetSetAlarmAdap
     @NonNull
     @Override
     public SetAlarmHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_setting, parent, false);
-        return new SetAlarmHolder(view);
+        ItemSettingBinding binding = ItemSettingBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new SetAlarmHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SetAlarmHolder holder, @SuppressLint("RecyclerView") int position) {
         AlarmSetting itemSheet = mList.get(position);
         if (itemSheet != null) {
-            holder.tvBottemSheet.setText(context.getString(itemSheet.getIdName()));
-            holder.tvBottemSheet.setTextColor(ContextCompat.getColor(context, R.color.black));
+            holder.binding.tvNameSetting.setText(context.getString(itemSheet.getIdName()));
+            holder.binding.tvNameSetting.setTextColor(ContextCompat.getColor(context, R.color.black));
             if (itemSheet.isSelected()) {
-                holder.layoutBottemSheet.setBackgroundResource(R.color.pale_turquoise);
-                holder.tvBottemSheet.setTextColor(ContextCompat.getColor(context, R.color.navy));
-                holder.imgSelectedItem.setVisibility(View.VISIBLE);
-                holder.imgSelectedItem.setImageResource(R.drawable.done_21dp_navy);
+                holder.binding.layoutItemSetting.setBackgroundResource(R.color.pale_turquoise);
+                holder.binding.tvNameSetting.setTextColor(ContextCompat.getColor(context, R.color.navy));
+                holder.binding.imgAttributeItemSetting.setVisibility(View.VISIBLE);
+                holder.binding.imgAttributeItemSetting.setImageResource(R.drawable.done_21dp_navy);
             } else {
-                holder.layoutBottemSheet.setBackgroundResource(R.color.white);
-                holder.tvBottemSheet.setTextColor(ContextCompat.getColor(context, R.color.black));
-                holder.imgSelectedItem.setVisibility(View.GONE);
+                holder.binding.layoutItemSetting.setBackgroundResource(R.color.white);
+                holder.binding.tvNameSetting.setTextColor(ContextCompat.getColor(context, R.color.black));
+                holder.binding.imgAttributeItemSetting.setVisibility(View.GONE);
             }
-            holder.layoutBottemSheet.setOnClickListener(new View.OnClickListener() {
+            holder.binding.layoutItemSetting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mList.get(position).setSelected(true);
@@ -79,15 +80,11 @@ public class SheetSetAlarmAdapter extends RecyclerView.Adapter<SheetSetAlarmAdap
     }
 
     public static class SetAlarmHolder extends RecyclerView.ViewHolder {
-        private ConstraintLayout layoutBottemSheet;
-        private TextView tvBottemSheet;
-        private ImageView imgSelectedItem;
+        private final ItemSettingBinding binding;
 
-        public SetAlarmHolder(@NonNull View itemView) {
-            super(itemView);
-            layoutBottemSheet = itemView.findViewById(R.id.layout_item_setting);
-            tvBottemSheet = itemView.findViewById(R.id.tv_name_setting);
-            imgSelectedItem = itemView.findViewById(R.id.img_attribute_item_setting);
+        public SetAlarmHolder(@NonNull ItemSettingBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }
