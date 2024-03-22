@@ -19,7 +19,7 @@ public class SleepCalculatorFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SleepCalculatorFragmentBinding binding = SleepCalculatorFragmentBinding.inflate(inflater, container, false);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.layout_sleep_calculator, new PickATimeSleepFragment(), null);
         fragmentTransaction.commit();

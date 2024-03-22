@@ -9,9 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.adapter.BlockedListAdapter;
@@ -37,8 +35,10 @@ public class BlockedListActivity extends AppCompatActivity {
         com.example.whitenoiseapplication.databinding.ActivityBlockedListBinding binding = ActivityBlockedListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().setTitle(R.string.blocked_list);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.blocked_list);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         mListBlocked = getBlockedList();
         blockedListAdapter = new BlockedListAdapter(this, mListBlocked, new IClickItemAudioListener() {

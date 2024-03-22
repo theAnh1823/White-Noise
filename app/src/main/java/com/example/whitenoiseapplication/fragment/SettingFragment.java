@@ -64,9 +64,9 @@ public class SettingFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void startMainActivity(){
-        Intent intent = getActivity().getIntent();
-        getActivity().finish();
+    private void startMainActivity() {
+        Intent intent = requireActivity().getIntent();
+        requireActivity().finish();
         startActivity(intent);
     }
 
@@ -79,13 +79,13 @@ public class SettingFragment extends Fragment {
         Intent intent = new Intent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getActivity().getPackageName());
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireActivity().getPackageName());
         } else {
             intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-            intent.putExtra("app_package", getActivity().getPackageName());
-            intent.putExtra("app_uid", getActivity().getApplicationInfo().uid);
+            intent.putExtra("app_package", requireActivity().getPackageName());
+            intent.putExtra("app_uid", requireActivity().getApplicationInfo().uid);
         }
-        getActivity().startActivity(intent);
+        requireActivity().startActivity(intent);
     }
 
     private void openPolicyActivity() {

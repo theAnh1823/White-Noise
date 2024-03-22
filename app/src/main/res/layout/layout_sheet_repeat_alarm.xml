@@ -28,10 +28,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_round"
-        app:layout_constraintBottom_toTopOf="@id/checkbox_monday"
+        app:layout_constraintBottom_toTopOf="@id/check_box_monday"
         tools:ignore="MissingConstraints" />
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/checkbox_monday"
+        android:id="@+id/check_box_monday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_repeat_alarm_checkbox"
@@ -42,69 +42,69 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/checkbox_tuesday"
+        android:id="@+id/check_box_tuesday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_repeat_alarm_checkbox"
         android:paddingStart="@dimen/padding_start_repeat_alarm_checkbox"
         android:text="@string/tuesday"
         android:textSize="@dimen/text_size_repeat_alarm_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_monday"
+        app:layout_constraintTop_toBottomOf="@id/check_box_monday"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/checkbox_wednesday"
+        android:id="@+id/check_box_wednesday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_repeat_alarm_checkbox"
         android:paddingStart="@dimen/padding_start_repeat_alarm_checkbox"
         android:text="@string/wednesday"
         android:textSize="@dimen/text_size_repeat_alarm_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_tuesday"
+        app:layout_constraintTop_toBottomOf="@id/check_box_tuesday"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/checkbox_thursday"
+        android:id="@+id/check_box_thursday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_repeat_alarm_checkbox"
         android:paddingStart="@dimen/padding_start_repeat_alarm_checkbox"
         android:text="@string/thursday"
         android:textSize="@dimen/text_size_repeat_alarm_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_wednesday"
+        app:layout_constraintTop_toBottomOf="@id/check_box_wednesday"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/checkbox_friday"
+        android:id="@+id/check_box_friday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_repeat_alarm_checkbox"
         android:paddingStart="@dimen/padding_start_repeat_alarm_checkbox"
         android:text="@string/friday"
         android:textSize="@dimen/text_size_repeat_alarm_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_thursday"
+        app:layout_constraintTop_toBottomOf="@id/check_box_thursday"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/checkbox_saturday"
+        android:id="@+id/check_box_saturday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_repeat_alarm_checkbox"
         android:paddingStart="@dimen/padding_start_repeat_alarm_checkbox"
         android:text="@string/saturday"
         android:textSize="@dimen/text_size_repeat_alarm_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_friday"
+        app:layout_constraintTop_toBottomOf="@id/check_box_friday"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/checkbox_sunday"
+        android:id="@+id/check_box_sunday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_repeat_alarm_checkbox"
         android:paddingStart="@dimen/padding_start_repeat_alarm_checkbox"
         android:text="@string/sunday"
         android:textSize="@dimen/text_size_repeat_alarm_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_saturday"
+        app:layout_constraintTop_toBottomOf="@id/check_box_saturday"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <LinearLayout
@@ -117,7 +117,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_sunday">
+        app:layout_constraintTop_toBottomOf="@id/check_box_sunday">
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_cancel"
             android:layout_width="0dp"

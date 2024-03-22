@@ -49,12 +49,7 @@ public class ResultSleepCaculatorFragment extends Fragment {
         } else if (typeSleepCalculator == Sleep.sleepNow) {
             binding.tvBodyResultCalculate.setText(R.string.body_result_sleep_now);
         }
-        binding.btnRecalculateSleep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().popBackStack();
-            }
-        });
+        binding.btnRecalculateSleep.setOnClickListener(v -> getParentFragmentManager().popBackStack());
         return binding.getRoot();
     }
 

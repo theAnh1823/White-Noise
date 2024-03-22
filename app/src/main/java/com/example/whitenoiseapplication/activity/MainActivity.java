@@ -26,12 +26,13 @@ import com.example.whitenoiseapplication.util.LocaleHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    @SuppressLint("StaticFieldLeak")
     public static ActivityMainBinding binding;
     private CountDownManager countDownManager;
     private Audio mAudio;
     private boolean isPlaying;
     private int actionAudio;
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
@@ -50,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().setElevation(0);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setElevation(0);
+        }
 
         binding.tvCountdownTimer.setCompoundDrawablesWithIntrinsicBounds(R.drawable.timer, 0, 0, 0);
         countDownManager = CountDownManager.initInstance(binding.tvCountdownTimer, () -> {
@@ -61,11 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
         boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
-        Context context;
         if (isVietnameseLanguage) {
-            context = LocaleHelper.setLocale(this, "vi");
+            LocaleHelper.setLocale(this, "vi");
         } else {
-            context = LocaleHelper.setLocale(this, "en");
+            LocaleHelper.setLocale(this, "en");
         }
 
         binding.viewPager2.setUserInputEnabled(false);

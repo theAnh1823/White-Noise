@@ -17,7 +17,6 @@ import com.example.whitenoiseapplication.listener.OnSwitchCompatListener;
 import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.util.DayIdsStringConverter;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
-import com.example.whitenoiseapplication.viewmodel.CreateAlarmViewModel;
 
 import java.util.List;
 
@@ -26,12 +25,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
     private List<Alarm> listAlarm;
     private final IClickItemAlarm iClickItemAlarm;
     private final OnSwitchCompatListener switchCompatListener;
-    private final CreateAlarmViewModel createAlarmViewModel;
     private final AlarmsListViewModel alarmsListViewModel;
 
-    public AlarmAdapter(Context context, CreateAlarmViewModel createAlarmViewModel, AlarmsListViewModel alarmsListViewModel, List<Alarm> listAlarm, IClickItemAlarm iClickItemAlarm, OnSwitchCompatListener switchCompatListener) {
+    public AlarmAdapter(Context context, AlarmsListViewModel alarmsListViewModel, List<Alarm> listAlarm, IClickItemAlarm iClickItemAlarm, OnSwitchCompatListener switchCompatListener) {
         this.context = context;
-        this.createAlarmViewModel = createAlarmViewModel;
         this.alarmsListViewModel = alarmsListViewModel;
         this.listAlarm = listAlarm;
         this.iClickItemAlarm = iClickItemAlarm;
@@ -52,7 +49,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         if (alarm != null) {
             holder.itemAlarmBinding.tvAlarmTime.setText(String.format("%02d", alarm.getAlarmHour()) + ":" + String.format("%02d", alarm.getAlarmMinute()));
 
-            String contentItemAlarm = "";
+            String contentItemAlarm;
             if (alarm.isRepeatForDaysOfWeek()) {
                 contentItemAlarm = DayIdsStringConverter.getStringDaysOfWeek(alarm, context);
             } else {
@@ -64,9 +61,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
             holder.itemAlarmBinding.tvContentItemAlarm.setText(contentItemAlarm);
             changeTextColor(alarm, holder);
 
-            holder.itemAlarmBinding.layoutItemAlarm.setOnClickListener(v -> {
-                iClickItemAlarm.onClickItemAlarm(alarm);
-            });
+            holder.itemAlarmBinding.layoutItemAlarm.setOnClickListener(v -> iClickItemAlarm.onClickItemAlarm(alarm));
 
             holder.itemAlarmBinding.switchEnableAlarm.setChecked(alarm.isAlarmEnabled());
             holder.itemAlarmBinding.switchEnableAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -87,7 +82,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         return 0;
     }
 
-    private void changeTextColor(Alarm alarm, AlarmViewHolder holder) {
+    private void changeTextColor(@NonNull Alarm alarm, AlarmViewHolder holder) {
         if (alarm.isAlarmEnabled()) {
             holder.itemAlarmBinding.tvAlarmTime.setTextColor(ContextCompat.getColor(context, R.color.white));
             holder.itemAlarmBinding.tvContentItemAlarm.setTextColor(ContextCompat.getColor(context, R.color.white));
@@ -119,7 +114,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
     }
 
     public void undoItem(Alarm alarm, int index) {
-        createAlarmViewModel.insert(alarm);
+        alarmsListViewModel.insert(alarm);
         alarm.schedule(context);
         listAlarm.add(index, alarm);
         notifyItemInserted(index);

@@ -11,8 +11,8 @@ import com.example.whitenoiseapplication.model.Alarm;
 import java.util.List;
 
 public class AlarmRepository {
-    private AlarmDAO alarmDao;
-    private LiveData<List<Alarm>> alarmsLiveData;
+    private final AlarmDAO alarmDao;
+    private final LiveData<List<Alarm>> alarmsLiveData;
     public AlarmRepository(Application application) {
         AlarmDatabase alarmDatabase = AlarmDatabase.getInstance(application);
         alarmDao = alarmDatabase.alarmDAO();

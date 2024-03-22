@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.databinding.ItemBlockedListBinding;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.model.Audio;
@@ -17,9 +16,9 @@ import com.example.whitenoiseapplication.model.Audio;
 import java.util.List;
 
 public class BlockedListAdapter extends RecyclerView.Adapter<BlockedListAdapter.BlockedHolder>{
-    private Context context;
-    private List<Audio> mList;
-    private IClickItemAudioListener listener;
+    private final Context context;
+    private final List<Audio> mList;
+    private final IClickItemAudioListener listener;
 
     public BlockedListAdapter(Context context, List<Audio> mList, IClickItemAudioListener listener) {
         this.context = context;

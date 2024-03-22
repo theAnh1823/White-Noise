@@ -76,11 +76,8 @@ public class FavAudioAdapter extends RecyclerView.Adapter<FavAudioAdapter.FavAud
             holder.tvAudio.setTextColor(color);
             holder.btnMore.setImageResource(R.drawable.more_vert_white);
         }
-        holder.btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iClickItemAudioListener.onClickMore(audio);
-            }
+        holder.btnMore.setOnClickListener(v -> {
+            iClickItemAudioListener.onClickMore(audio);
         });
 
         if (audio.isFavorite()) {

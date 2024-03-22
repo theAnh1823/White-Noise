@@ -22,7 +22,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.databinding.ActivityAudioBinding;
-import com.example.whitenoiseapplication.databinding.ActivityMainBinding;
 import com.example.whitenoiseapplication.model.Audio;
 import com.example.whitenoiseapplication.model.CountDownManager;
 import com.example.whitenoiseapplication.service.AudioService;
@@ -55,7 +54,9 @@ public class AudioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAudioBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         //set navigation bar and status bar to transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

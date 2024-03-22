@@ -1,7 +1,6 @@
 package com.example.whitenoiseapplication.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -23,9 +22,6 @@ import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Random;
-
-import at.markushi.ui.CircleButton;
 
 public class AlarmAlertActivity extends AppCompatActivity {
     private Alarm alarm;
@@ -36,15 +32,16 @@ public class AlarmAlertActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         com.example.whitenoiseapplication.databinding.ActivityAlarmAlertBinding binding = ActivityAlarmAlertBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
         SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
         boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
-        Context context;
         if (isVietnameseLanguage) {
-            context = LocaleHelper.setLocale(this, "vi");
+            LocaleHelper.setLocale(this, "vi");
         } else {
-            context = LocaleHelper.setLocale(this, "en");
+            LocaleHelper.setLocale(this, "en");
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -78,7 +75,6 @@ public class AlarmAlertActivity extends AppCompatActivity {
             calendar.add(Calendar.MINUTE, 10);
 
             Alarm alarm = new Alarm(
-                    new Random().nextInt(Integer.MAX_VALUE),
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE),
                     R.string.once,

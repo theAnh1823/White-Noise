@@ -3,14 +3,11 @@ package com.example.whitenoiseapplication.fragment;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatCheckBox;
-
-import com.example.whitenoiseapplication.R;
+import com.example.whitenoiseapplication.databinding.LayoutSheetRepeatAlarmBinding;
+import com.example.whitenoiseapplication.model.Alarm;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -19,32 +16,32 @@ import java.util.Calendar;
 import java.util.List;
 
 public class BottomSheetCustomAlarmRepeat extends BottomSheetDialogFragment {
+    private LayoutSheetRepeatAlarmBinding binding;
+    private final Alarm alarm;
     private List<Integer> listDayOfWeek;
     private List<Boolean> listSelectionDayOfWeek;
-    private AppCompatCheckBox checkBoxMonday, checkBoxTuesday, checkBoxWednesday,
-            checkBoxThursday, checkBoxFriday, checkBoxSaturday, checkBoxSunday;
-    private AppCompatButton btnSave, btnCancel;
     public interface CustomAlarmRepeatListener{
         void clickCustomAlarmRepeat(List<Boolean> selections);
     }
     private CustomAlarmRepeatListener repeatListener;
-    public BottomSheetCustomAlarmRepeat() {
+    public BottomSheetCustomAlarmRepeat(Alarm alarm) {
+        this.alarm = alarm;
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_sheet_repeat_alarm, null);
-        bottomSheetDialog.setContentView(view);
+        binding = LayoutSheetRepeatAlarmBinding.inflate(LayoutInflater.from(getContext()));
+        bottomSheetDialog.setContentView(binding.getRoot());
 
         listDayOfWeek = new ArrayList<>();
         listSelectionDayOfWeek = new ArrayList<>();
-        initComponents(view);
-        btnCancel.setOnClickListener(v -> {
-            dismiss();
-        });
-        btnSave.setOnClickListener(v -> {
+
+        changeCheckBoxState(alarm);
+        binding.btnCancel.setOnClickListener(v -> dismiss());
+
+        binding.btnSaveRepeatSetting.setOnClickListener(v -> {
             getListDayOfWeek();
             getListSelectionDayOfWeek();
             repeatListener.clickCustomAlarmRepeat(listSelectionDayOfWeek);
@@ -52,54 +49,51 @@ public class BottomSheetCustomAlarmRepeat extends BottomSheetDialogFragment {
         return bottomSheetDialog;
     }
 
-
     private void getListDayOfWeek() {
-        if (checkBoxMonday.isChecked()){
+        if (binding.checkBoxMonday.isChecked()){
             listDayOfWeek.add(Calendar.MONDAY);
         }
-        if (checkBoxTuesday.isChecked()){
+        if (binding.checkBoxTuesday.isChecked()){
             listDayOfWeek.add(Calendar.TUESDAY);
         }
-        if (checkBoxWednesday.isChecked()){
+        if (binding.checkBoxWednesday.isChecked()){
             listDayOfWeek.add(Calendar.WEDNESDAY);
         }
-        if (checkBoxThursday.isChecked()){
+        if (binding.checkBoxThursday.isChecked()){
             listDayOfWeek.add(Calendar.THURSDAY);
         }
-        if (checkBoxFriday.isChecked()){
+        if (binding.checkBoxFriday.isChecked()){
             listDayOfWeek.add(Calendar.FRIDAY);
         }
-        if (checkBoxSaturday.isChecked()){
+        if (binding.checkBoxSaturday.isChecked()){
             listDayOfWeek.add(Calendar.SATURDAY);
         }
-        if (checkBoxSunday.isChecked()){
+        if (binding.checkBoxSunday.isChecked()){
             listDayOfWeek.add(Calendar.SUNDAY);
         }
     }
 
     private void getListSelectionDayOfWeek(){
-        listSelectionDayOfWeek.add(checkBoxMonday.isChecked());
-        listSelectionDayOfWeek.add(checkBoxTuesday.isChecked());
-        listSelectionDayOfWeek.add(checkBoxWednesday.isChecked());
-        listSelectionDayOfWeek.add(checkBoxThursday.isChecked());
-        listSelectionDayOfWeek.add(checkBoxFriday.isChecked());
-        listSelectionDayOfWeek.add(checkBoxSaturday.isChecked());
-        listSelectionDayOfWeek.add(checkBoxSunday.isChecked());
+        listSelectionDayOfWeek.add(binding.checkBoxMonday.isChecked());
+        listSelectionDayOfWeek.add(binding.checkBoxTuesday.isChecked());
+        listSelectionDayOfWeek.add(binding.checkBoxWednesday.isChecked());
+        listSelectionDayOfWeek.add(binding.checkBoxThursday.isChecked());
+        listSelectionDayOfWeek.add(binding.checkBoxFriday.isChecked());
+        listSelectionDayOfWeek.add(binding.checkBoxSaturday.isChecked());
+        listSelectionDayOfWeek.add(binding.checkBoxSunday.isChecked());
+    }
+
+    private void changeCheckBoxState(Alarm alarm){
+        binding.checkBoxMonday.setChecked(alarm.isMonday());
+        binding.checkBoxTuesday.setChecked(alarm.isTuesday());
+        binding.checkBoxWednesday.setChecked(alarm.isWednesday());
+        binding.checkBoxThursday.setChecked(alarm.isThursday());
+        binding.checkBoxFriday.setChecked(alarm.isFriday());
+        binding.checkBoxSaturday.setChecked(alarm.isSaturday());
+        binding.checkBoxSunday.setChecked(alarm.isSunday());
     }
 
     public void setAlarmRepeatListener(CustomAlarmRepeatListener repeatListener){
         this.repeatListener = repeatListener;
-    };
-
-    private void initComponents(View view) {
-        checkBoxMonday = view.findViewById(R.id.checkbox_monday);
-        checkBoxTuesday = view.findViewById(R.id.checkbox_tuesday);
-        checkBoxWednesday = view.findViewById(R.id.checkbox_wednesday);
-        checkBoxThursday = view.findViewById(R.id.checkbox_thursday);
-        checkBoxFriday = view.findViewById(R.id.checkbox_friday);
-        checkBoxSaturday = view.findViewById(R.id.checkbox_saturday);
-        checkBoxSunday = view.findViewById(R.id.checkbox_sunday);
-        btnSave = view.findViewById(R.id.btn_save_repeat_setting);
-        btnCancel = view.findViewById(R.id.btn_cancel);
     }
 }

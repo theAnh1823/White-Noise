@@ -24,13 +24,11 @@ import com.example.whitenoiseapplication.activity.SetAlarmActivity;
 import com.example.whitenoiseapplication.adapter.AlarmAdapter;
 import com.example.whitenoiseapplication.callback.RecyclerViewItemAlarmTouchHelper;
 import com.example.whitenoiseapplication.databinding.AlarmFragmentBinding;
-import com.example.whitenoiseapplication.listener.IClickItemAlarm;
 import com.example.whitenoiseapplication.listener.ItemTouchHelperListener;
 import com.example.whitenoiseapplication.listener.OnSwitchCompatListener;
 import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.util.DateTimeInterval;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
-import com.example.whitenoiseapplication.viewmodel.CreateAlarmViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -38,14 +36,12 @@ import java.util.List;
 public class AlarmFragment extends Fragment implements ItemTouchHelperListener, OnSwitchCompatListener {
     private AlarmFragmentBinding binding;
     private AlarmsListViewModel alarmsListViewModel;
-    private CreateAlarmViewModel createAlarmViewModel;
     private AlarmAdapter mAlarmAdapter;
     private List<Alarm> mAlarmList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createAlarmViewModel = new ViewModelProvider(this).get(CreateAlarmViewModel.class);
         alarmsListViewModel = new ViewModelProvider(this).get(AlarmsListViewModel.class);
         alarmsListViewModel.getListLiveData().observe(this, new Observer<List<Alarm>>() {
             @Override
@@ -58,13 +54,12 @@ public class AlarmFragment extends Fragment implements ItemTouchHelperListener, 
         });
     }
 
-    @SuppressLint("MissingInflatedId")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = AlarmFragmentBinding.inflate(inflater, container, false);
 
-        mAlarmAdapter = new AlarmAdapter(getContext(), createAlarmViewModel, alarmsListViewModel, mAlarmList, (IClickItemAlarm) alarm -> {
+        mAlarmAdapter = new AlarmAdapter(getContext(), alarmsListViewModel, mAlarmList, alarm -> {
             Intent intent = new Intent(getActivity(), SetAlarmActivity.class);
             intent.putExtra("title_alarm_activity", getString(R.string.fix_alarm));
             intent.putExtra("adjust_alarm_setting", true);
@@ -126,14 +121,13 @@ public class AlarmFragment extends Fragment implements ItemTouchHelperListener, 
     }
 
     @Override
-    public void onClickSwitchCompat(Alarm alarm) {
+    public void onClickSwitchCompat(@NonNull Alarm alarm) {
         if (alarm.isAlarmEnabled()) {
             alarm.cancelAlarm(requireContext());
-            alarmsListViewModel.update(alarm);
         } else {
             alarm.schedule(requireContext());
-            alarmsListViewModel.update(alarm);
             Toast.makeText(requireContext(), DateTimeInterval.getDateTimeInterval(alarm, requireContext()), Toast.LENGTH_LONG).show();
         }
+        alarmsListViewModel.update(alarm);
     }
 }

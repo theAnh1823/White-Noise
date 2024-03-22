@@ -19,8 +19,10 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
-        com.example.whitenoiseapplication.databinding.ActivitySplashBinding binding = ActivitySplashBinding.inflate(getLayoutInflater());
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+        ActivitySplashBinding binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         Animation zoomAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom);

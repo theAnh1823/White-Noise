@@ -15,9 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,13 +23,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.AudioActivity;
-import com.example.whitenoiseapplication.adapter.AudioAdapter;
 import com.example.whitenoiseapplication.adapter.FavAudioAdapter;
+import com.example.whitenoiseapplication.databinding.FavoriteSoundsFragmentBinding;
+import com.example.whitenoiseapplication.databinding.LayoutDialogBlockedBinding;
 import com.example.whitenoiseapplication.listener.IClickItemAudioListener;
 import com.example.whitenoiseapplication.listener.IClickItemBottomSheet;
 import com.example.whitenoiseapplication.model.Audio;
@@ -49,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteAudioFragment extends Fragment {
-    private RecyclerView mRecyclerView;
+    private FavoriteSoundsFragmentBinding binding;
     private FavAudioAdapter mFavAudioAdapter;
     private GridLayoutManager mGridLayoutManager;
     private LinearLayoutManager mLinearLayoutManager;
@@ -62,12 +59,11 @@ public class FavoriteAudioFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favorite_sounds_fragment, container, false);
-        mRecyclerView = view.findViewById(R.id.rcv_home_fav_sounds);
+        binding = FavoriteSoundsFragmentBinding.inflate(inflater, container, false);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
 
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        binding.rcvHomeFavSounds.setLayoutManager(mGridLayoutManager);
         mListAudio = getListFavoriteAudio();
         mFavAudioAdapter = new FavAudioAdapter(getActivity(), mListAudio, new IClickItemAudioListener() {
             @Override
@@ -93,8 +89,8 @@ public class FavoriteAudioFragment extends Fragment {
                 clickUnFavoriteItem(audio);
             }
         });
-        mRecyclerView.setAdapter(mFavAudioAdapter);
-        return view;
+        binding.rcvHomeFavSounds.setAdapter(mFavAudioAdapter);
+        return binding.getRoot();
     }
 
     private void openAudioActivity(Audio audio) {
@@ -114,14 +110,11 @@ public class FavoriteAudioFragment extends Fragment {
     }
 
     private void showDialogUnBlocked(Audio audio) {
+        LayoutDialogBlockedBinding dialogBlockedBinding = LayoutDialogBlockedBinding.inflate(getLayoutInflater());
         Dialog dialog = new Dialog(requireActivity());
-        dialog.setContentView(R.layout.layout_dialog_blocked);
-        Button btnUnBlocked = dialog.findViewById(R.id.btn_dialog_unblocked);
-        Button btnCancel = dialog.findViewById(R.id.btn_cancel);
-        ImageView imgAudio = dialog.findViewById(R.id.img_audio_dialog);
-        TextView tvNameAudio = dialog.findViewById(R.id.tv_name_audio);
-        tvNameAudio.setText(audio.getNameAudio());
-        Glide.with(requireActivity()).load(audio.getImageResource()).into(imgAudio);
+        dialog.setContentView(dialogBlockedBinding.getRoot());
+        dialogBlockedBinding.tvNameAudio.setText(audio.getNameAudio());
+        Glide.with(requireActivity()).load(audio.getImageResource()).into(dialogBlockedBinding.imgAudioDialog);
 
         Window window = dialog.getWindow();
         assert window != null;
@@ -130,18 +123,12 @@ public class FavoriteAudioFragment extends Fragment {
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+        dialogBlockedBinding.btnCancel.setOnClickListener(v -> {
+            dialog.dismiss();
         });
-        btnUnBlocked.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unBlockItem(audio);
-                dialog.dismiss();
-            }
+        dialogBlockedBinding.btnDialogUnblocked.setOnClickListener(v -> {
+            FavoriteAudioFragment.this.unBlockItem(audio);
+            dialog.dismiss();
         });
         dialog.show();
     }
@@ -163,21 +150,16 @@ public class FavoriteAudioFragment extends Fragment {
                 bottomSheetAudio.dismiss();
             }
         });
-        bottomSheetAudio.show(getActivity().getSupportFragmentManager(), bottomSheetAudio.getTag());
+        bottomSheetAudio.show(requireActivity().getSupportFragmentManager(), bottomSheetAudio.getTag());
     }
 
     private void showDialogConfirmBlock(Audio audio) {
+        LayoutDialogBlockedBinding dialogBlockedBinding = LayoutDialogBlockedBinding.inflate(getLayoutInflater());
         Dialog dialog = new Dialog(requireActivity());
-        dialog.setContentView(R.layout.layout_dialog_blocked);
-        TextView titleDialog = dialog.findViewById(R.id.tv_title_dialog);
-        titleDialog.setText(R.string.confirm_block);
-        Button btnUnBlocked = dialog.findViewById(R.id.btn_dialog_unblocked);
-        btnUnBlocked.setText(R.string.block);
-        Button btnCancel = dialog.findViewById(R.id.btn_cancel);
-        ImageView imgAudio = dialog.findViewById(R.id.img_audio_dialog);
-        TextView tvNameAudio = dialog.findViewById(R.id.tv_name_audio);
-        tvNameAudio.setText(audio.getNameAudio());
-        Glide.with(requireActivity()).load(audio.getImageResource()).into(imgAudio);
+        dialog.setContentView(dialogBlockedBinding.getRoot());
+        dialogBlockedBinding.tvTitleDialog.setText(R.string.confirm_block);
+        dialogBlockedBinding.tvNameAudio.setText(audio.getNameAudio());
+        Glide.with(requireActivity()).load(audio.getImageResource()).into(dialogBlockedBinding.imgAudioDialog);
 
         Window window = dialog.getWindow();
         assert window != null;
@@ -186,18 +168,12 @@ public class FavoriteAudioFragment extends Fragment {
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnUnBlocked.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                blockItem(audio);
-                dialog.dismiss();
-            }
+        dialogBlockedBinding.btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialogBlockedBinding.btnDialogUnblocked.setText(R.string.block);
+        dialogBlockedBinding.btnDialogUnblocked.setOnClickListener(v -> {
+            blockItem(audio);
+            dialog.dismiss();
         });
         dialog.show();
     }
@@ -235,12 +211,12 @@ public class FavoriteAudioFragment extends Fragment {
         bundle.putSerializable("object_audio", audio);
         intent.putExtras(bundle);
 
-        getActivity().startService(intent);
+        requireActivity().startService(intent);
     }
 
     private void stopService() {
         Intent intent = new Intent(getActivity(), AudioService.class);
-        getActivity().stopService(intent);
+        requireActivity().stopService(intent);
     }
 
     private void resetCountDownTimer(Audio audio) {
@@ -256,7 +232,7 @@ public class FavoriteAudioFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_appbar_home, menu);
         this.mMenu = menu;
         setIconMenu();
@@ -307,10 +283,10 @@ public class FavoriteAudioFragment extends Fragment {
     private void onClickChangeTypeDisplay() {
         if (mCurrentTypeDisplay == Audio.TYPE_GRID) {
             setTypeDisplayRecycleView(Audio.TYPE_LIST);
-            mRecyclerView.setLayoutManager(mLinearLayoutManager);
+            binding.rcvHomeFavSounds.setLayoutManager(mLinearLayoutManager);
         } else if (mCurrentTypeDisplay == Audio.TYPE_LIST) {
             setTypeDisplayRecycleView(Audio.TYPE_GRID);
-            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            binding.rcvHomeFavSounds.setLayoutManager(mGridLayoutManager);
         }
         mFavAudioAdapter.notifyDataSetChanged();
         setIconMenu();

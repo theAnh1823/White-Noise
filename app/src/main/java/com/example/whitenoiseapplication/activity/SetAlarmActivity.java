@@ -27,12 +27,10 @@ import com.example.whitenoiseapplication.util.DayIdsStringConverter;
 import com.example.whitenoiseapplication.util.LocaleHelper;
 import com.example.whitenoiseapplication.util.TimePickerUtil;
 import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
-import com.example.whitenoiseapplication.viewmodel.CreateAlarmViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 public class SetAlarmActivity extends AppCompatActivity {
     private ActivitySetAlarmBinding binding;
@@ -40,7 +38,6 @@ public class SetAlarmActivity extends AppCompatActivity {
     private boolean adjustExistingAlarm;
     private Alarm alarmCreating;
     private Setting settingRepeatAlarm;
-    private CreateAlarmViewModel createAlarmViewModel;
     private AlarmsListViewModel alarmsListViewModel;
     private Calendar calendar;
     private SetAlarmAdapter setAlarmAdapter;
@@ -56,7 +53,9 @@ public class SetAlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySetAlarmBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
         SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
         boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
@@ -83,7 +82,6 @@ public class SetAlarmActivity extends AppCompatActivity {
         }
         listAlarmSound = getListAlarmSound();
         listRepeatSelection = getListRepeatSelection();
-        createAlarmViewModel = new ViewModelProvider(this).get(CreateAlarmViewModel.class);
         alarmsListViewModel = new ViewModelProvider(this).get(AlarmsListViewModel.class);
 
         List<Setting> listSettingAlarm = adjustExistingAlarm ? getListSettingExistAlarm(alarmCreating) : getListSettingDefaultAlarm();
@@ -113,7 +111,7 @@ public class SetAlarmActivity extends AppCompatActivity {
             if (adjustExistingAlarm) {
                 alarmsListViewModel.update(alarmCreating);
             } else {
-                createAlarmViewModel.insert(alarmCreating);
+                alarmsListViewModel.insert(alarmCreating);
             }
             alarmCreating.schedule(getApplicationContext());
             Toast.makeText(this, getTitleTimeDuration(), Toast.LENGTH_LONG).show();
@@ -160,7 +158,7 @@ public class SetAlarmActivity extends AppCompatActivity {
                         setWeekdaysAlarm();
                         setWeekendAlarm(false);
                     }
-                    if (position > 0){
+                    if (position > 0) {
                         setWeekdaysAlarm();
                         setWeekendAlarm(true);
                         alarmCreating.setRecurring(true);
@@ -178,7 +176,7 @@ public class SetAlarmActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void openSheetCustomRepeat(Setting setting) {
-        sheetCustomAlarmRepeat = new BottomSheetCustomAlarmRepeat();
+        sheetCustomAlarmRepeat = new BottomSheetCustomAlarmRepeat(alarmCreating);
         sheetCustomAlarmRepeat.show(this.getSupportFragmentManager(), bottomSheetSetAlarm.getTag());
         sheetCustomAlarmRepeat.setAlarmRepeatListener((selections) -> {
             listSelectionDayOfWeek = selections;
@@ -198,15 +196,12 @@ public class SetAlarmActivity extends AppCompatActivity {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onItemClick(int position) {
-                bottomSheetSetAlarm.setSaveListener(new BottomSheetSetAlarm.SaveListener() {
-                    @Override
-                    public void saveAlarmSetting() {
-                        setting.setContentItem(getString(listAlarmSound.get(position).getIdName()));
-                        alarmCreating.setRingtoneId(listAlarmSound.get(position).getIdName());
-                        alarmCreating.setRingToneAlarm(listAlarmSound.get(position).getResourceAudio());
-                        setAlarmAdapter.notifyDataSetChanged();
-                        bottomSheetSetAlarm.dismiss();
-                    }
+                bottomSheetSetAlarm.setSaveListener(() -> {
+                    setting.setContentItem(getString(listAlarmSound.get(position).getIdName()));
+                    alarmCreating.setRingtoneId(listAlarmSound.get(position).getIdName());
+                    alarmCreating.setRingToneAlarm(listAlarmSound.get(position).getResourceAudio());
+                    setAlarmAdapter.notifyDataSetChanged();
+                    bottomSheetSetAlarm.dismiss();
                 });
             }
         });
@@ -271,7 +266,6 @@ public class SetAlarmActivity extends AppCompatActivity {
     }
 
     private void setDefaultAlarm() {
-        alarmCreating.setAlarmId(new Random().nextInt(Integer.MAX_VALUE));
         alarmCreating.setTitleAlarm("");
         alarmCreating.setAlarmHour(calendar.get(Calendar.HOUR_OF_DAY));
         alarmCreating.setAlarmMinute(calendar.get(Calendar.MINUTE));
@@ -292,7 +286,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         alarmCreating.setSunday(listSelectionDayOfWeek.get(6));
     }
 
-    private void setWeekdaysAlarm(){
+    private void setWeekdaysAlarm() {
         alarmCreating.setMonday(true);
         alarmCreating.setTuesday(true);
         alarmCreating.setWednesday(true);
@@ -300,12 +294,12 @@ public class SetAlarmActivity extends AppCompatActivity {
         alarmCreating.setFriday(true);
     }
 
-    private void setWeekendAlarm(boolean isEnabled){
+    private void setWeekendAlarm(boolean isEnabled) {
         alarmCreating.setSaturday(isEnabled);
         alarmCreating.setSunday(isEnabled);
     }
 
-    private String getTitleTimeDuration(){
+    private String getTitleTimeDuration() {
         return DateTimeInterval.getDateTimeInterval(alarmCreating, context);
     }
 }

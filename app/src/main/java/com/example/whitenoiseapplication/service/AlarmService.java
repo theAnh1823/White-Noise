@@ -17,18 +17,14 @@ import android.os.Vibrator;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.whitenoiseapplication.R;
 import com.example.whitenoiseapplication.activity.AlarmAlertActivity;
-import com.example.whitenoiseapplication.fragment.AlarmFragment;
 import com.example.whitenoiseapplication.model.Alarm;
 import com.example.whitenoiseapplication.receiver.AlarmReceiver;
 import com.example.whitenoiseapplication.util.LocaleHelper;
-import com.example.whitenoiseapplication.viewmodel.AlarmsListViewModel;
 
 public class AlarmService extends Service {
-    private Context context;
     public static final int ACTION_CANCEL = 1;
     private Alarm mAlarm;
     private MediaPlayer mMediaPlayer;
@@ -39,9 +35,9 @@ public class AlarmService extends Service {
         SharedPreferences sharedPreferences = getSharedPreferences("pref_switch_language", MODE_PRIVATE);
         boolean isVietnameseLanguage = sharedPreferences.getBoolean("value", false);
         if (isVietnameseLanguage) {
-            context = LocaleHelper.setLocale(this, "vi");
+            LocaleHelper.setLocale(this, "vi");
         } else {
-            context = LocaleHelper.setLocale(this, "en");
+            LocaleHelper.setLocale(this, "en");
         }
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

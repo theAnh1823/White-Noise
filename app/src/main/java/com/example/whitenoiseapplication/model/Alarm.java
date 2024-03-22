@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -20,8 +19,7 @@ import java.util.List;
 
 @Entity(tableName = "alarm_table")
 public class Alarm implements Serializable {
-    @PrimaryKey
-    @NonNull
+    @PrimaryKey(autoGenerate = true)
     private int alarmId;
     private int alarmHour, alarmMinute;
     private String titleAlarm;
@@ -33,8 +31,7 @@ public class Alarm implements Serializable {
     public Alarm() {
     }
 
-    public Alarm(int alarmId, int alarmHour, int alarmMinute, int repeatModeId, String titleAlarm, int ringtoneId, int ringToneAlarm, boolean isAlarmEnabled, boolean recurring, boolean repeatForDaysOfWeek, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
-        this.alarmId = alarmId;
+    public Alarm(int alarmHour, int alarmMinute, int repeatModeId, String titleAlarm, int ringtoneId, int ringToneAlarm, boolean isAlarmEnabled, boolean recurring, boolean repeatForDaysOfWeek, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
         this.alarmHour = alarmHour;
         this.alarmMinute = alarmMinute;
         this.repeatModeId = repeatModeId;
@@ -53,7 +50,7 @@ public class Alarm implements Serializable {
         this.sunday = sunday;
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "ScheduleExactAlarm"})
     public void schedule(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 

@@ -173,9 +173,7 @@ public class AllAudioFragment extends Fragment {
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
-        blockedBinding.btnCancel.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        blockedBinding.btnCancel.setOnClickListener(v -> dialog.dismiss());
         blockedBinding.btnDialogUnblocked.setOnClickListener(v -> {
             blockItem(audio);
             dialog.dismiss();
@@ -225,12 +223,12 @@ public class AllAudioFragment extends Fragment {
         bundle.putSerializable("object_audio", audio);
         intent.putExtras(bundle);
 
-        getActivity().startService(intent);
+        requireActivity().startService(intent);
     }
 
     private void stopService() {
         Intent intent = new Intent(getActivity(), AudioService.class);
-        getActivity().stopService(intent);
+        requireActivity().stopService(intent);
     }
 
     private void resetCountDownTimer(Audio audio) {

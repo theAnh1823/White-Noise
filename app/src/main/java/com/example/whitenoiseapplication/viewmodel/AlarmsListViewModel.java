@@ -12,13 +12,17 @@ import com.example.whitenoiseapplication.repository.AlarmRepository;
 import java.util.List;
 
 public class AlarmsListViewModel extends AndroidViewModel {
-    private AlarmRepository alarmRepository;
-    private LiveData<List<Alarm>> listLiveData;
+    private final AlarmRepository alarmRepository;
+    private final LiveData<List<Alarm>> listLiveData;
 
     public AlarmsListViewModel(@NonNull Application application) {
         super(application);
         alarmRepository = new AlarmRepository(application);
         listLiveData = alarmRepository.getAlarmsLiveData();
+    }
+
+    public void insert(Alarm alarm){
+        alarmRepository.insert(alarm);
     }
 
     public void update(Alarm alarm){

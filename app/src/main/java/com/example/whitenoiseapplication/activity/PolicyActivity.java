@@ -13,14 +13,16 @@ public class PolicyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        com.example.whitenoiseapplication.databinding.ActivityPolicyBinding binding = ActivityPolicyBinding.inflate(getLayoutInflater());
+        ActivityPolicyBinding binding = ActivityPolicyBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.webView.loadUrl("file:///android_asset/policy.html");
         binding.webView.getSettings().setAllowContentAccess(true);
         binding.webView.getSettings().setAllowFileAccess(true);
 
-        getSupportActionBar().setTitle(R.string.privacy_policy);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.privacy_policy);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
