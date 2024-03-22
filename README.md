@@ -3,11 +3,15 @@ Introduction
 -----------------
 White Noise is a powerful Android application providing high-quality white noise along with diverse alarm features. With a wide collection of white noise sounds, users can customize a peaceful environment for relaxation, focus, or sleep. 
 Additionally, the flexible alarm feature allows you to set personal preferences, ensuring a pleasant and comfortable waking experience. Explore White Noise now to create an ideal sound environment for every moment of the day!
-### APK
-Download apk file here [White Noise v1.0](https://drive.google.com/file/d/1tOANggqFFrNzfqA8xOh8ZUZcM7vFAEHP/view?usp=sharing)
+
+## APK
+Download apk file here [White Noise v1.0](https://drive.google.com/file/d/1d7IzoN6fnVoYrgE6RmGRZ4YmJKlQaxej/view?usp=sharing)
 ```
-https://drive.google.com/file/d/1tOANggqFFrNzfqA8xOh8ZUZcM7vFAEHP/view?usp=sharing
+https://drive.google.com/file/d/1d7IzoN6fnVoYrgE6RmGRZ4YmJKlQaxej/view?usp=sharing
 ```
+## Video demo
+This is a demo video of my app: [https://youtu.be/IlQGuErj2dE?si=N-d2RCMCqW3BOtA-](https://youtu.be/IlQGuErj2dE?si=N-d2RCMCqW3BOtA-)
+
 ## Features
 - Diverse white noise: Choose from a rich collection of white noise sounds, including ocean waves, rain sounds, and more to create a serene and relaxing environment.
 - Search functionality: Effortlessly search for specific sounds using keywords.
@@ -94,6 +98,10 @@ src="https://github.com/theAnh1823/White-Noise/assets/113270703/1e746fb7-4a94-4c
 - [**Circle Button**](https://github.com/markushi/android-circlebutton) circle button widget for Android.
 - [**No Internet dialog**](https://github.com/ImaginativeShohag/Oops-No-Internet) displays a notification when there is no internet connection in the app.
 - **Android Support Libraries**
+
+## FAQ
+#### Why is my alarm feature not functioning correctly?
+Please enable auto-start and disable battery-saving restrictions for the application to ensure proper functioning of the alarm feature.
 
 ## Authors
 - [Nguyen The Anh](https://github.com/theAnh1823)
